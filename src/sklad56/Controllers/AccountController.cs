@@ -24,8 +24,10 @@ namespace sklad56.Controllers
         {
             var userName = new PartialUserInfo();
 
-            if (User.IsInRole(Globals.editGroup)) userName.Name = Repository.getAdminName(User.Identity.Name);
-            else userName.Name = "Гость";
+            try 
+            { userName.Name = Repository.getAdminName(User.Identity.Name); }
+            catch (Exception)
+            { userName.Name = "Гость"; }
 
             return PartialView("Footer", userName);  //отображаем информацию о пользователе в футер
         }

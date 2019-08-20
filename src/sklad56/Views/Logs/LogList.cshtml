@@ -56,7 +56,7 @@
                         @act.User1.Username
                         @if (User.IsInRole(sklad56.Globals.editGroup))
                         {
-                            <span class="label label-warning">&nbsp;-&nbsp;</span>
+                            <span class="label label-warning"><a href="@Url.Action("DeleteAction", "Logs", new { ActID = act.ID_Act })">&nbsp;-&nbsp;</a></span>
                         }
                         </td>
                     </tr>

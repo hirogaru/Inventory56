@@ -18,7 +18,7 @@
                 <td>@x.date.ToString()</td>
                 <td>
                     @if (User.IsInRole(sklad56.Globals.editGroup))
-                    { <span class="label label-warning">списать</span> }
+                    { <span class="label label-warning"><a href="@Url.Action("ReturnItem", "Equip", new { ItemID = x.item.ID_Item, returnUrl = Request.Url.PathAndQuery })">списать</a></span> }
                 </td>
         </tr>
         }

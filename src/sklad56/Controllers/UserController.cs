@@ -16,7 +16,7 @@ namespace sklad56.Controllers
             return View();
         }
 
-        public ActionResult InCharge()
+        public ViewResult InCharge()
         {
             var list = new List<UserInCharge>();
             var data = Repository.InCharges.ToList();
@@ -51,7 +51,7 @@ namespace sklad56.Controllers
         }
         
         [ValidateInput(false)]  //Аттрибут отключает проверку (чтоб не возникало HttpRequestValidationException)
-        public ActionResult UserList(int page = 1, string searchString = null)
+        public ViewResult UserList(int page = 1, string searchString = null)
         {
             ViewBag.Search = searchString;
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -68,7 +68,7 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public ActionResult UserEditList(int page = 1) //список пользователей для редактирования
+        public ViewResult UserEditList(int page = 1) //список пользователей для редактирования
         {
             return View(new PageableData<User>(Repository.Users.OrderBy(name => name.Username), page, Globals.itemsPerPage));
         }
@@ -88,7 +88,7 @@ namespace sklad56.Controllers
         }
         
         [Authorize(Roles = Globals.editGroup)]
-        public ActionResult RegisterUser()
+        public ViewResult RegisterUser()
         {
             ViewBag.Edit = false;
             var newUser = new User();

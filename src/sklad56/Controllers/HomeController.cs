@@ -7,10 +7,10 @@ namespace sklad56.Controllers
     //Базовый контроллер, от него наследуются все контроллеры, которым требуется работа с SQL репозиторием
     public abstract class BaseController : Controller  
     {
-        //[Inject]
         public IRepository Repository
         {
-            get { return Service<IRepository>.GetInstance(); } 
+            //get { return new TestRepository(); }
+            get { return Service<IRepository>.GetInstance(); }
         }
     }
 

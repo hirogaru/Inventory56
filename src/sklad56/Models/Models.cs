@@ -29,14 +29,13 @@ namespace sklad56.Models
 
         public PageableData(IQueryable<T> queryableSet, int page, int itemPerPage = 0)
         {
-           
-            ItemPerPage = itemPerPage == 0 ? ItemPerPageDefault : itemPerPage;
+           ItemPerPage = itemPerPage == 0 ? ItemPerPageDefault : itemPerPage;
             
-            PageNo = page;
-            var count = queryableSet.Count();
+           PageNo = page;
+           var count = queryableSet.Count();
 
-            CountPage = (int)decimal.Remainder(count, itemPerPage) == 0 ? count / itemPerPage : count / itemPerPage + 1; //Вычисляем кол-во страниц
-            List = queryableSet.Skip((PageNo - 1) * itemPerPage).Take(itemPerPage); //Используя PageNo, набираем страницу значений
+           CountPage = (int)decimal.Remainder(count, itemPerPage) == 0 ? count / itemPerPage : count / itemPerPage + 1; //Вычисляем кол-во страниц
+           List = queryableSet.Skip((PageNo - 1) * itemPerPage).Take(itemPerPage); //Используя PageNo, набираем страницу значений
         }
     }
 

@@ -34,7 +34,7 @@
             @using (Html.BeginForm("EquipList", "Equip", new { sorted = sortVar}, FormMethod.Post, new { @class = "form-search" }))
             {
                 @Html.TextBox("searchString", searchString ?? "", new { @class = "input-medium search-query" })
-                <button type="submit" class="btn">Поиск</button>
+                <button type="submit" class="btn btn-default">Поиск</button>
             }
         </div>
         <h3>Список оборудования</h3>

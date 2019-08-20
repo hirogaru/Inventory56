@@ -98,7 +98,7 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public ActionResult RegisterItem()
+        public ViewResult RegisterItem()
         {
             ViewBag.Edit = false;
             //Закидываем во вью подготовленные листы
@@ -164,7 +164,7 @@ namespace sklad56.Controllers
         }
 
         [ValidateInput(false)]  //по аналогии с UserController, но с сортировкой по типам
-        public ActionResult EquipList(int page = 1, int sorted = 0, string searchString = null)
+        public ViewResult EquipList(int page = 1, int sorted = 0, string searchString = null)
         {
             //Выводим итемы по их типу (если sorted = 0 то выводим всё подряд)
             var typeItems = sorted != 0 ? Repository.Items.Where(itm => itm.Cast == sorted).OrderBy(name => name.Itemname) : Repository.Items.OrderBy(name => name.Itemname);
@@ -185,7 +185,7 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public ActionResult EquipEditList(int page = 1, int sorted = 0)
+        public ViewResult EquipEditList(int page = 1, int sorted = 0)
         {
             //сортируем итемы по их типу (если sorted = 0 то выводим всё подряд)
             var typeItems = sorted != 0 ? Repository.Items.Where(itm => itm.Cast == sorted).OrderBy(name => name.Itemname) : Repository.Items.OrderBy(name => name.Itemname);
@@ -270,7 +270,7 @@ namespace sklad56.Controllers
         /// Методы для движения ТМЦ по складу
         /// </summary>
         [Authorize(Roles = Globals.editGroup)]
-        public RedirectResult ReturnItem(Guid ItemID, string returnUrl, bool broke = false, bool lose = false) //возвращение предмета на склад
+        public RedirectResult ReturnItem(Guid ItemID, string returnUrl, string Coment = "", bool broke = false, bool lose = false) //возвращение предмета на склад
         {
             Item itm = Repository.Items.First(g => g.ID_Item == ItemID);
 
@@ -284,7 +284,7 @@ namespace sklad56.Controllers
                     When = DateTime.Now,
                     Todo = (byte)Enums.Todo.Return,
                     AdminID = Repository.getAdminID(User.Identity.Name),
-                    Coment = ""
+                    Coment = Coment
                 };
                 if (broke) act.Todo = (byte)Enums.Todo.breaked;
                 if (lose) act.Todo = (byte)Enums.Todo.lost;
@@ -299,8 +299,9 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public ActionResult ReturnList(int page = 1)
+        public ViewResult ReturnList(int page = 1, string coment = null)
         {
+            ViewBag.Coment = coment;
             var sortedItems = Repository.Items.Where(itm => itm.Username != null).OrderBy(name => name.Itemname).AsQueryable(); //создаём список предметов на руках у пользователей
             return View(new PageableData<Item>(sortedItems, page, Globals.itemsPerPage)); //отображаем список
         }
@@ -367,7 +368,7 @@ namespace sklad56.Controllers
             result.item.User = usr;  //назначаем нового пользователя предмету
             Repository.UpdateItem(result.item);
 
-            return RedirectToAction("LogList", "Logs");
+            return RedirectToAction("ReturnList", "Equip");
         }
     }
 }

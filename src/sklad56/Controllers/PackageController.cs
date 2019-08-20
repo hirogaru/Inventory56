@@ -15,7 +15,7 @@ namespace sklad56.Controllers
             return View();
         }
 
-        public ActionResult PackageList(Guid PackID, int page = 1)
+        public ActionResult PackageList(Guid? PackID, int page = 1)
         {
             var Pack = Repository.Packages.FirstOrDefault(x => x.ID_Pack == PackID);
 
@@ -36,7 +36,7 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public ActionResult EditPack(Guid PackID)
+        public ActionResult EditPack(Guid? PackID)
         {
             Package editPack = Repository.Packages //ищем комплект в базе
                 .FirstOrDefault(g => g.ID_Pack == PackID);
@@ -50,7 +50,7 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public ActionResult Register()
+        public ViewResult Register()
         {
             ViewBag.Edit = false;
             var newPack = new Package();
@@ -87,13 +87,13 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public ActionResult EditList() 
+        public ViewResult EditList() 
         {
             var packs = Repository.Packages.ToList();
             return View(packs);  //список комплектов для редактирования
         }
 
-        public ActionResult PlaceList(Guid PlaceID, int page = 1)
+        public ActionResult PlaceList(Guid? PlaceID, int page = 1)
         {
             var Place = Repository.Places.FirstOrDefault(x => x.ID_Place == PlaceID);
 

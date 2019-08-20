@@ -15,7 +15,7 @@ namespace sklad56.Controllers
             return View();
         }
 
-        public ActionResult LogList(int page = 1, int sort = 0)
+        public ViewResult LogList(int page = 1, int sort = 0)
         {
             ViewBag.sort = sort;
             IQueryable<Models.Action> actions;
@@ -53,6 +53,13 @@ namespace sklad56.Controllers
         {
             var actions = Repository.Actions.Where(x => x.Whom == UserID).OrderByDescending(name => name.When).ToList();
             return PartialView(actions); //выводим все действия конкретного пользователя
+        }
+
+        [Authorize(Roles = Globals.editGroup)]
+        public RedirectToRouteResult DeleteAction(Guid ActID)
+        {
+            Repository.RemoveAct(ActID); //удаляем действие из базы
+            return RedirectToAction("LogList");
         }
     }
 }

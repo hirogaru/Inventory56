@@ -34,7 +34,7 @@
             @Model.pack.Coment
             @if (User.IsInRole(sklad56.Globals.editGroup))
             {
-                <span class="label label-info">...</span>
+                <span class="label label-info"><a href="@Url.Action("EditPack", "Package", new { PackID = Model.pack.ID_Pack })">...</a></span>
             }
         </div>
 

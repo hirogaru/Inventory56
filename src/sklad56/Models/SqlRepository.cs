@@ -135,7 +135,7 @@ namespace sklad56.Models
             }
             catch
             {
-                return "Пользователь";
+                return "Гость";
             }
         }
 
@@ -331,5 +331,88 @@ namespace sklad56.Models
             return false;
         }
                 
+    }
+
+    public class TestRepository : IRepository
+    {
+        public IQueryable<DelData> DelDatas { get; set; }
+
+        public IQueryable<InCharge> InCharges { get; set; }
+
+        public IQueryable<LogoPass> LogoPasses { get; private set; }
+
+        public Guid getAdminID(string login)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string getAdminName(string login)
+        {
+            return "Admin";
+        }
+
+        public IQueryable<User> Users
+        {
+            get { return (new List<User> { new User { Username = "User1" } }).AsQueryable(); }
+        }
+
+        public bool CreateUser(User instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool UpdateUser(User instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool RemoveUser(Guid idUser)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IQueryable<Place> Places { get { return (new List<Place> { new Place { Name = "zone 51" } }).AsQueryable(); } }
+        public IQueryable<Item> Items { get { return (new List<Item> { new Item { Itemname = "Item 111" } }).AsQueryable(); } }
+        public bool CreateItem(Item instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool UpdateItem(Item instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool RemoveItem(Guid idItem)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IQueryable<sklad56.Models.Action> Actions { get { return (new List<sklad56.Models.Action> { new sklad56.Models.Action() }).AsQueryable(); } }
+        public bool CreateAct(sklad56.Models.Action instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool RemoveAct(Guid idAct)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IQueryable<Package> Packages { get { return (new List<Package> { new Package { Name = "some pack" } }).AsQueryable(); } }
+        public bool CreatePack(Package instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool UpdatePack(Package instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool RemovePack(Guid idPack)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

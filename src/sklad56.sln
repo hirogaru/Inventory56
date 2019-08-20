@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sklad56", "sklad56\sklad56.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sklad56.Tools", "sklad56.Tools\sklad56.Tools.csproj", "{77693E63-037B-45F8-8FD3-5DBB49E3A456}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sklad56.UnitTest", "sklad56.UnitTest\sklad56.UnitTest.csproj", "{E72F7098-7A2F-4796-9385-2E3F6CD3E36C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,12 +17,17 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EC7CF010-7686-48F2-8ED2-0AF79FEE61DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EC7CF010-7686-48F2-8ED2-0AF79FEE61DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC7CF010-7686-48F2-8ED2-0AF79FEE61DE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{EC7CF010-7686-48F2-8ED2-0AF79FEE61DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC7CF010-7686-48F2-8ED2-0AF79FEE61DE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{77693E63-037B-45F8-8FD3-5DBB49E3A456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77693E63-037B-45F8-8FD3-5DBB49E3A456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77693E63-037B-45F8-8FD3-5DBB49E3A456}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77693E63-037B-45F8-8FD3-5DBB49E3A456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E72F7098-7A2F-4796-9385-2E3F6CD3E36C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E72F7098-7A2F-4796-9385-2E3F6CD3E36C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E72F7098-7A2F-4796-9385-2E3F6CD3E36C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E72F7098-7A2F-4796-9385-2E3F6CD3E36C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
