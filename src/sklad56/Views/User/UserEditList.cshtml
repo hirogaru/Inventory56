@@ -40,8 +40,8 @@
                         <a href="@Url.Action("UserCard", "User", new { UserID = user.ID_User })">@user.Username</a>
                     </td>
                     <td class="text-right">
-                        <span class="label label-info">...</span>
-                        <span class="label label-warning">&nbsp;x&nbsp;</span>
+                        <span class="label label-info"><a href="@Url.Action("EditUser", "User", new { UserID = user.ID_User })">...</a></span>
+                        <span class="label label-warning"><a href="@Url.Action("DeleteUser", "User", new { UserID = user.ID_User, returnUrl = Request.Url.PathAndQuery })" onclick="return confirm('Удаляем пользователя\nВы уверены?')">&nbsp;x&nbsp;</a></span>
                     </td>
                 </tr>
             }

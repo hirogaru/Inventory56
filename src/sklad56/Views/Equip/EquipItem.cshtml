@@ -98,7 +98,7 @@
                             {
 
                                 if (User.IsInRole(sklad56.Globals.editGroup))
-                                { <a href="#">Поверки не требуется</a> }
+                                { <a href="@Url.Action("EditVeryfi", "Equip", new { ItemID = Model.ID_Item, returnUrl = Request.Url.PathAndQuery })">Поверки не требуется</a> }
                                 else
                                 { <span>Поверки не требуется</span> }
                             }
@@ -106,7 +106,7 @@
                             {
                                 string date = Model.Verifi.ToString().TrimEnd('0', ':');
                                 if (User.IsInRole(sklad56.Globals.editGroup))
-                                {<a href="#">Поверка:<br> @date</a>}
+                                {<a href="@Url.Action("EditVeryfi", "Equip", new { ItemID = Model.ID_Item, returnUrl = Request.Url.PathAndQuery })">Поверка:<br> @date</a>}
                                 else
                                 {<span>Поверка:<br> @date</span> }
                             }

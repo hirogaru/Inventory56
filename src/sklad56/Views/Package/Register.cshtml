@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Register";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var Edit = (bool)ViewBag.Edit;
 }
 
 <div class="row">
@@ -28,10 +29,11 @@
     <div class="col-sm-8 content">
         <h3>Создание/редактирование комплекта</h3>
 
-        @using (Html.BeginForm("Register", "Package", FormMethod.Post, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm("Register", "Package", new { Edit = Edit }, FormMethod.Post, new { @class = "form-horizontal" }))
         {
             <fieldset>
                 <div class="control-group">
+                    @Html.HiddenFor(x => x.ID_Pack)
                     <label class="control-label" for="Username">
                         <abbr title="Данное имя будет отображаться везде, где фигурирует комплект" class="initialism">Имя комплекта</abbr>
                     </label>
@@ -51,10 +53,10 @@
                 </div>
                 <br />
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">
-                        применить
+                    <button type="submit" class="btn btn-success">
+                        Применить
                     </button>
-                    @Html.ActionLink("Cancel", "EditList", "Package", null, new { @class = "btn" })
+                    @Html.ActionLink("Cancel", "EditList", "Package", null, new { @class = "btn btn-primary" })
                 </div>
             </fieldset>
         }

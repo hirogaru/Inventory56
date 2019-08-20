@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Finish";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var rurl = (string)ViewBag.rurl;
+    var inf = (int)ViewBag.inf;
+}
+
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                <li><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                <li class="active"><a href="@Url.Action("Movements", "Home")">Операции</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("оформить", "Index", "Cart")</li>
+            <li>@Html.ActionLink("вернуть", "ReturnList", "Equip")</li>
+            <li class="disabled"><a href="#">прочее</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-9 content">
+        <h3>Готово </h3>
+        <p>@Html.ValidationMessage("EmptyCart")</p>
+        @if (inf == 1)
+        {
+            <p>Оформление успешно завершено!</p>
+        }
+        <div class="text-center">
+            <a class="btn btn-primary" href="@rurl">Продолжить</a>
+        </div>
+        </div>
+</div>
+

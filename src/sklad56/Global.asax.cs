@@ -31,6 +31,8 @@ namespace sklad56
         public const int itemsPerPage = 5;  //Кол-во записей на странице
 
         public const int TeaserChars = 120;  //кол-во знаков до тизера
+
+        //Глобальные переменные 
     }
 
     public class MvcApplication : System.Web.HttpApplication

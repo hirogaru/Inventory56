@@ -1,0 +1,64 @@
+﻿@model sklad56.Models.HandOnViewModel
+
+@{
+    ViewBag.Title = "HandOn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                <li><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                <li class="active"><a href="@Url.Action("Movements", "Home")">Операции</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("оформить", "Index", "Cart")</li>
+            <li>@Html.ActionLink("вернуть", "ReturnList", "Equip")</li>
+            <li class="disabled"><a href="#">прочее</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-9 content">
+        <h3>Передать предмет</h3>
+        <br />
+        @using (Html.BeginForm("HandOn", "Equip", new { ItemID = Model.item.ID_Item }, FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <table>
+                <tr>
+                    <td>
+                        @Html.HiddenFor(x => Model.item )
+                        <p align="center"><b>@Model.item.Itemname @Model.item.Serial &nbsp;</b></p>
+                    </td>
+                    <td>
+                        <p align="center"><b>@Model.item.User.Username</b></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p align=right>Кому передать: &nbsp;</p>
+                    </td>
+                    <td>
+                        <p>@Html.DropDownListFor(md => md.user, Model.users)</p>
+                        @Html.ValidationMessage("NotFound")
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <button type="submit" class="btn btn-success">OK</button>
+                    </td>
+                    <td>
+                        &nbsp;<a class="btn btn-primary" href="@Url.Action("ReturnList", "Equip")">Отмена</a>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>
+

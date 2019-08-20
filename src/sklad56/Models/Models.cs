@@ -182,4 +182,81 @@ namespace sklad56.Models
 
         public string itemID { get; set; }
     }
+
+    public class HandOnViewModel
+    {
+        //модель отображения Пунктa «передать»
+
+        public Item item { get; set; }
+
+        public string user { get; set; }
+
+        public List<SelectListItem> users { get; set; }
+    }
+
+    public class EditVeryfiViewModel
+    {
+        //модель отображения редактирования поверки
+
+        public string returnUrl { get; set; }
+
+        public Guid ItemID { get; set; }
+
+        public string Itemname { get; set; }
+
+        public int Day { get; set; }
+
+        public int Month { get; set; }
+
+        public int Year { get; set; }
+
+        public IEnumerable<SelectListItem> DaySelectList
+        {
+            get
+            {
+                for (int i = 1; i < 32; i++)
+                {
+                    yield return new SelectListItem
+                    {
+                        Value = i.ToString(),
+                        Text = i.ToString(),
+                        Selected = Day == i
+                    };
+                }
+            }
+        }
+
+        public IEnumerable<SelectListItem> MonthSelectList
+        {
+            get
+            {
+                for (int i = 1; i < 13; i++)
+                {
+                    yield return new SelectListItem
+                    {
+                        Value = i.ToString(),
+                        Text = new DateTime(2000, i, 1).ToString("MMMM"),
+                        Selected = Month == i
+                    };
+                }
+            }
+        }
+
+        public IEnumerable<SelectListItem> YearSelectList
+        {
+            get
+            {
+                for (int i = DateTime.Now.Year; i < DateTime.Now.Year + 5; i++)
+                {
+                    yield return new SelectListItem
+                    {
+                        Value = i.ToString(),
+                        Text = i.ToString(),
+                        Selected = Year == i
+                    };
+                }
+            }
+        }
+
+    }
 }

@@ -51,7 +51,7 @@
                         <a href="@Url.Action("EquipItem", "Equip", new { ItemID = item.ID_Item })">@item.Itemname @item.Serial</a>
                     </td>
                     <td class="text-right">
-                        @if ((User.IsInRole(sklad56.Globals.editGroup)) && (item.Username == null))
+                        @if ((User.IsInRole(sklad56.Globals.editGroup)) && (item.Username == null) && (item.Place.ToString() != "44444444-4444-4444-4444-444444444444"))
                         {
                             using (Html.BeginForm("AddToCart", "Cart", new { ItemID = item.ID_Item, returnUrl = Request.Url.PathAndQuery }))
                             {

@@ -20,6 +20,8 @@ namespace sklad56.Models
 
         string getAdminName(string login);
 
+        Guid getAdminID(string login);
+
         #endregion 
 
         #region User
@@ -109,13 +111,27 @@ namespace sklad56.Models
             }
         }
 
-        public string getAdminName(string login)
+        public Guid getAdminID(string login)
         {
             login = login.Substring(Globals.DomainName.Length + 1); //отрезаем логин от домена
             try
             {
-                System.Guid UsrID = (Db.LogoPasses.First(p => p.Login == login)).UserID;
-                return (Db.Users.First(p => p.ID_User == UsrID)).Username;
+                Guid UsrID = (Db.LogoPasses.First(p => p.Login == login)).UserID;
+                return UsrID;
+            }
+            catch
+            {
+                return Guid.Empty;
+            }
+        }
+
+        public string getAdminName(string login)
+        {
+            var AdminID = getAdminID(login);
+            try
+            {
+                var usrName = (Db.Users.First(p => p.ID_User == AdminID)).Username;
+                return usrName;
             }
             catch
             {
@@ -148,7 +164,10 @@ namespace sklad56.Models
             User cache = Db.Users.Where(p => p.ID_User == instance.ID_User).FirstOrDefault();
             if (cache != null)
             {
-                //TODO : Update fields for User
+                cache.ID_User = instance.ID_User;
+                cache.Username = instance.Username;
+                cache.Post = instance.Post;
+                cache.Phone = instance.Phone;
                 Db.Users.Context.SubmitChanges();
                 return true;
             }
@@ -194,7 +213,15 @@ namespace sklad56.Models
             Item cache = Db.Items.Where(p => p.ID_Item == instance.ID_Item).FirstOrDefault();
             if (cache != null)
             {
-                //TODO : Update fields for Item
+                cache.ID_Item = instance.ID_Item;
+                cache.Itemname = instance.Itemname;
+                cache.Serial = instance.Serial;
+                cache.Package = Db.Packages.Single(x => x.ID_Pack == instance.Belongs);
+                cache.Place1 = Db.Places.Single(x => x.ID_Place == instance.Place);
+                cache.Cast = instance.Cast;
+                cache.User = Db.Users.Where(p => p.ID_User == instance.Username).FirstOrDefault();
+                cache.Broken = instance.Broken;
+                cache.Verifi = instance.Verifi;
                 Db.Items.Context.SubmitChanges();
                 return true;
             }
@@ -281,7 +308,9 @@ namespace sklad56.Models
             Package cache = Db.Packages.Where(p => p.ID_Pack == instance.ID_Pack).FirstOrDefault();
             if (cache != null)
             {
-                //TODO : Update fields for Package
+                cache.ID_Pack = instance.ID_Pack;
+                cache.Name = instance.Name;
+                cache.Coment = instance.Coment;
                 Db.Packages.Context.SubmitChanges();
                 return true;
             }

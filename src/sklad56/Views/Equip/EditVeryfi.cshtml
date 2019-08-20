@@ -1,0 +1,63 @@
+﻿@model sklad56.Models.EditVeryfiViewModel
+
+@{
+    ViewBag.Title = "EditVeryfi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                <li class="active"><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                <li><a href="@Url.Action("Movements", "Home")">Операции</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("пользователи", "UserEditList", "User")</li>
+            <li>@Html.ActionLink("предметы", "EquipEditList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "EditList", "Package")</li>
+        </ul>
+    </div>
+    <div class="col-sm-8 content">
+        <h3>Дата поверки</h3>
+        <b>@Model.Itemname</b>
+        <br /><br />
+        @using (Html.BeginForm("EditVeryfi", "Equip", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.Hidden("ItemID", Model.ItemID)
+            @Html.Hidden("Itemname", Model.Itemname)
+            @Html.Hidden("returnUrl", Model.returnUrl)
+            <table>
+                <tr>
+                    <td>
+                        <p>@Html.DropDownList("Day", Model.DaySelectList)</p>
+                    </td>
+                    <td>
+                        <p>@Html.DropDownList("Month", Model.MonthSelectList)</p>
+                    </td>
+                    <td>
+                        <p>&nbsp;@Html.DropDownList("Year", Model.YearSelectList)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <button type="submit" class="btn btn-success">OK</button>
+                    </td>
+                    <td>
+                        &nbsp;<a class="btn btn-danger" href="@Url.Action("DeleteVeryfi", "Equip", new { ItemID = Model.ItemID, returnUrl = Model.returnUrl})">Удалить</a>
+                    </td>
+                    <td>
+                        &nbsp;<a class="btn btn-primary" href="@Model.returnUrl">Отмена</a>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>

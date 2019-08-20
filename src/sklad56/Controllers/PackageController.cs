@@ -35,18 +35,33 @@ namespace sklad56.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [Authorize(Roles = Globals.editGroup)]
+        public ActionResult EditPack(Guid PackID)
+        {
+            Package editPack = Repository.Packages //ищем комплект в базе
+                .FirstOrDefault(g => g.ID_Pack == PackID);
+
+            if (editPack != null)
+            {
+                ViewBag.Edit = true;
+                return View("Register", editPack); //страница редактирования комплекта
+            }
+            return RedirectToAction("EditList");
+        }
+
+        [Authorize(Roles = Globals.editGroup)]
         public ActionResult Register()
         {
+            ViewBag.Edit = false;
             var newPack = new Package();
             return View(newPack);  //страница регистрации нового комплекта
         }
 
         [HttpPost]
-        public ActionResult Register(Package pack)
+        public ActionResult Register(Package pack, bool Edit = false)
         {
             var anyPack = Repository.Users.Any(p => string.Compare(p.Username, pack.Name) == 0);
-            if (anyPack)
+            if (anyPack && !Edit)
             {
                 ModelState.AddModelError("Name", "Комплект с таким именем уже существует");
             }
@@ -58,10 +73,16 @@ namespace sklad56.Controllers
 
             if (ModelState.IsValid)
             {
-                pack.ID_Pack = Guid.NewGuid();
-                Repository.CreatePack(pack);
+                if (Edit == false)
+                {
+                    pack.ID_Pack = Guid.NewGuid();
+                    Repository.CreatePack(pack);
+                }
+                else Repository.UpdatePack(pack);
                 return RedirectToAction("EditList");
             }
+
+            ViewBag.Edit = Edit;
             return View(pack);  //станица регистрации с инвалидными полями 
         }
 
@@ -89,6 +110,26 @@ namespace sklad56.Controllers
                 return View(data);  //выводим список предметов, привязанных к данному месту
             }
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = Globals.editGroup)]
+        public RedirectResult DeletePack(Guid PackID, string returnUrl)
+        {
+            Package pack = Repository.Packages //ищем пользователя в базе
+                .FirstOrDefault(g => g.ID_Pack == PackID);
+            var defPack = Repository.Packages.FirstOrDefault(x => x.ID_Pack == Guid.Parse("11111111-1111-1111-1111-111111111111") ); //комплект по умолчанию
+
+            if ((pack == null) || (PackID == defPack.ID_Pack)) return Redirect(returnUrl); //если комплект не найден или он зарезервирован, то завершаем метод
+
+            var useItems = Repository.Items.Where(x => x.Belongs == PackID).ToList(); //список предметов в комплекте
+            foreach (Item itm in useItems)
+            {
+                itm.Package = defPack;
+                Repository.UpdateItem(itm); //отвязываем предметы от комплекта
+            }
+
+            Repository.RemovePack(PackID); //удаляем комплект из базы
+            return Redirect(returnUrl);
         }
     }
 }

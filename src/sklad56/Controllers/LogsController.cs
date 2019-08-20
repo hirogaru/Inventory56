@@ -15,7 +15,7 @@ namespace sklad56.Controllers
             return View();
         }
 
-        public ViewResult LogList(int page = 1, int sort = 0)
+        public ActionResult LogList(int page = 1, int sort = 0)
         {
             ViewBag.sort = sort;
             IQueryable<Models.Action> actions;
@@ -34,7 +34,7 @@ namespace sklad56.Controllers
                     actions = Repository.Actions.OrderBy(name => name.When);
                     break;
                 default:
-                    actions = Repository.Actions.OrderByDescending(name => name.ID_Act);
+                    actions = Repository.Actions.OrderByDescending(name => name.When);
                     break;
             }
             var data = new PageableData<Models.Action>(actions, page, Globals.itemsPerPage);
@@ -44,14 +44,14 @@ namespace sklad56.Controllers
         [ChildActionOnly]
         public ActionResult itemLog(Guid ItemID)
         {
-            var actions = Repository.Actions.Where( x => x.What == ItemID).ToList();
+            var actions = Repository.Actions.Where( x => x.What == ItemID).OrderByDescending(name => name.When).ToList();
             return PartialView(actions); //выводим все действия связанные с предметом
         }
 
         [ChildActionOnly]
         public ActionResult UserLog(Guid UserID)
         {
-            var actions = Repository.Actions.Where(x => x.Whom == UserID).ToList();
+            var actions = Repository.Actions.Where(x => x.Whom == UserID).OrderByDescending(name => name.When).ToList();
             return PartialView(actions); //выводим все действия конкретного пользователя
         }
     }

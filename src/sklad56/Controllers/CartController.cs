@@ -10,13 +10,15 @@ namespace sklad56.Controllers
     {
         // GET: Cart
         [Authorize(Roles = Globals.editGroup)]
-        public ViewResult Index(string returnUrl)
+        public ActionResult Index(string returnUrl)
         {
+            if (returnUrl.IsNullOrEmpty()) returnUrl = Url.Action("EquipList", "Equip");
+
             List<SelectListItem> UserList = new List<SelectListItem>();
 
-            foreach(User x in Repository.Users)
+            foreach (User x in Repository.Users)
             {
-                UserList.Add(new SelectListItem(){Text = x.Username});
+                UserList.Add(new SelectListItem() { Text = x.Username });
             }
 
             return View(new CartIndexViewModel //отображаем корзину
@@ -25,6 +27,65 @@ namespace sklad56.Controllers
                 ReturnUrl = returnUrl,
                 Users = UserList
             });
+        }
+
+        [HttpPost]
+        public ActionResult Finish(CartIndexViewModel result)
+        {
+            var cart = GetCart();
+            ViewBag.rurl = result.ReturnUrl;
+            ViewBag.inf = 0; //сюда записываем результат оформления
+
+            if (cart.Lines.IsNullOrEmpty()) //проверяем пустоту корзины
+            {
+                ModelState.AddModelError("EmptyCart", "Поле оформления не может быть пустым. Добавьте хотя бы один предмет");
+                return View();
+            }
+
+            var usr = Repository.Users.ToList().FirstOrDefault(g => g.Username == result.User);
+            if (usr == null) //проверяем, есть ли такой пользователь
+            {
+                ViewBag.rurl = Url.Action("Index");
+                ModelState.AddModelError("EmptyCart", "Такой пользователь не найден. Укажите другого пользователя");
+                return View();
+            }
+
+            foreach (CartLine x in cart.Lines) //проверяем, все ли предметы безхозны
+            {
+                if (x.item.Username != null)
+                {
+                    ModelState.AddModelError("EmptyCart", "Некоторые предметы не удалось добавить, поскольку у них уже имеется пользователь");
+                    return View();
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                foreach (CartLine x in cart.Lines)
+                {
+                    var act = new Models.Action(); //Создаём новое действие
+
+                    act.ID_Act = Guid.NewGuid();
+                    act.Whom = usr.ID_User;
+                    act.What = x.item.ID_Item;
+                    act.When = DateTime.Now;
+                    act.Todo = (byte)Enums.Todo.InUse;
+                    act.AdminID = Repository.getAdminID(User.Identity.Name);
+                    act.Coment = result.Coment; //действие зарегистрировали
+
+                    x.item.User = usr;  //назначаем нового пользователя предмету
+
+                    Repository.UpdateItem(x.item);
+                    Repository.CreateAct(act);
+                }
+
+                GetCart().Clear();
+                ViewBag.inf = 1; //У - успех
+                ViewBag.rurl = Url.Action("LogList", "Logs");
+                return View();
+            }
+
+            return RedirectToAction("Index");//станица оформления(возвращается в случае непредвиденной ошибки)
         }
 
         public RedirectToRouteResult AddToCart(Guid ItemID, string returnUrl)

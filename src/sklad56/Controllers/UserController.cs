@@ -73,18 +73,33 @@ namespace sklad56.Controllers
             return View(new PageableData<User>(Repository.Users.OrderBy(name => name.Username), page, Globals.itemsPerPage));
         }
 
-        [HttpGet]
+        [Authorize(Roles = Globals.editGroup)]
+        public ActionResult EditUser(Guid UserID)
+        {
+            User editUser = Repository.Users //ищем пользователя в базе
+                .FirstOrDefault(g => g.ID_User == UserID);
+
+            if (editUser != null)
+            {
+                ViewBag.Edit = true;
+                return View("RegisterUser", editUser); //страница редактирования пользователя
+            }
+            return RedirectToAction("EquipEditList");
+        }
+        
+        [Authorize(Roles = Globals.editGroup)]
         public ActionResult RegisterUser()
         {
+            ViewBag.Edit = false;
             var newUser = new User();
             return View(newUser);  //страница регистрации нового пользователя
         }
 
         [HttpPost]
-        public ActionResult RegisterUser(User user)
+        public ActionResult RegisterUser(User user, bool Edit = false)
         {
             var anyUser = Repository.Users.Any(p => string.Compare(p.Username, user.Username) == 0);
-            if (anyUser)
+            if (anyUser && !Edit)
             {
                 ModelState.AddModelError("Username", "Пользователь с таким именем уже существует");
             }
@@ -96,12 +111,35 @@ namespace sklad56.Controllers
 
             if (ModelState.IsValid)
             {
-                user.ID_User = Guid.NewGuid();
-                Repository.CreateUser(user);
+                if (Edit == false)
+                {
+                    user.ID_User = Guid.NewGuid();
+                    Repository.CreateUser(user);
+                }
+                else Repository.UpdateUser(user);
                 return RedirectToAction("UserEditList");
             }
+
+            ViewBag.Edit = Edit;
             return View(user);  //станица регистрации с инвалидными полями 
         }
 
+        [Authorize(Roles = Globals.editGroup)]
+        public RedirectResult DeleteUser(Guid UserID, string returnUrl)
+        {
+            User User = Repository.Users //ищем пользователя в базе
+                .FirstOrDefault(g => g.ID_User == UserID);
+            if ((User == null) || (User.IsAdmin)) return Redirect(returnUrl); //если пользователь не найден или он - админ, то завершаем метод
+
+            var useItems = Repository.Items.Where(x => x.Username == UserID).ToList();
+            foreach (Item itm in useItems)
+            {
+                itm.User = null;
+                Repository.UpdateItem(itm); //отвязываем предметы от пользователя
+            }
+
+            Repository.RemoveUser(UserID); //удаляем пользователя из базы
+            return Redirect(returnUrl);
+        }
     }
 }

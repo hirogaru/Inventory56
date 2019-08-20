@@ -38,10 +38,10 @@
                         <a href="@Url.Action("UserCard", "User", new { UserID = item.User.ID_User })">@item.User.Username</a>
                     </td>
                     <td class="text-right">
-                        <span class="label label-info">передать</span>
-                        <span class="label label-warning">потерять</span>
-                        <span class="label label-warning">сломать</span>
-                        <span class="label label-success">вернуть</span>
+                        <span class="label label-info"><a href="@Url.Action("HandOn", "Equip", new { ItemID = item.ID_Item })">передать</a></span>
+                        <span class="label label-warning"><a href="@Url.Action("ReturnItem", "Equip", new { ItemID = item.ID_Item, returnUrl = Request.Url.PathAndQuery, lose = true })">потерять</a></span>
+                        <span class="label label-warning"><a href="@Url.Action("ReturnItem", "Equip", new { ItemID = item.ID_Item, returnUrl = Request.Url.PathAndQuery, broke = true })">сломать</a></span>
+                        <span class="label label-success"><a href="@Url.Action("ReturnItem", "Equip", new { ItemID = item.ID_Item, returnUrl = Request.Url.PathAndQuery })">вернуть</a></span>
                     </td>
                 </tr>
             }

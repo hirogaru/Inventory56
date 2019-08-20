@@ -47,8 +47,8 @@
                         <a href="@Url.Action("EquipItem", "Equip", new { ItemID = item.ID_Item })">@item.Itemname @item.Serial</a>
                     </td>
                     <td class="text-right">
-                        <span class="label label-info">...</span>
-                        <span class="label label-warning">&nbsp;x&nbsp;</span>
+                        <span class="label label-info"><a href="@Url.Action("EditItem", "Equip", new { ItemID = item.ID_Item })">...</a></span>
+                        <span class="label label-warning"><a href="@Url.Action("DeleteItem", "Equip", new { ItemID = item.ID_Item, returnUrl = Request.Url.PathAndQuery })" onclick="return confirm('Удаляем предмет\nВы уверены?')">&nbsp;x&nbsp;</a></span>
                     </td>
                 </tr>
             }

@@ -26,26 +26,6 @@
         </ul>
     </div>
     <div class="col-sm-9 tab-content">
-        <br />
-        <table align="right">
-            <tr>
-                <td>
-                    <p align=right><b>На кого: &nbsp;</b></p>
-                </td>
-                <td>
-                    <p>@Html.DropDownListFor(md => md.User, Model.Users)</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p align=right><b>Комментарий: &nbsp;</b></p>
-                </td>
-                <td>
-                    <p>@Html.TextBoxFor(md => md.Coment)</p>
-                </td>
-            </tr>
-        </table>
-
         <h3>Предметы на оформление</h3>
         <table class="table">
             <thead>
@@ -83,16 +63,39 @@
                 </tr>
             </tfoot>
         </table>
-        <label class="checkbox">
-            <input type="checkbox" value="" class="disabled">
-            При оформлении действия распечатать накладную
-        </label>
-        <div class="text-center">
-            
-            <br />
-            <a class="btn btn-primary" href="#">Оформить</a>
-            <a class="btn btn-primary" href="@Model.ReturnUrl">Продолжить</a>
-        </div>
+        @using (Html.BeginForm("Finish", "Cart", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <table align="right">
+                <tr>
+                    <td>
+                        <p align=right><b>На кого: &nbsp;</b></p>
+                    </td>
+                    <td>
+                        <p>@Html.DropDownListFor(md => md.User, Model.Users)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p align=right><b>Комментарий: &nbsp;</b></p>
+                    </td>
+                    <td>
+                        <p>@Html.TextBoxFor(md => md.Coment)</p>
+                    </td>
+                </tr>
+            </table>
+            <label class="checkbox">
+                <input type="checkbox" value="" class="disabled">
+                При оформлении действия распечатать накладную
+            </label>
+            @Html.Hidden("ReturnUrl", Model.ReturnUrl)
+            <div class="text-center">
+                <br /><br />
+                <button type="submit" class="btn btn-success">
+                    Оформить
+                </button>
+                <a class="btn btn-primary" href="@Model.ReturnUrl">Продолжить</a>
+            </div>
+        }
     </div>
 </div>
 
