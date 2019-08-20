@@ -8,7 +8,7 @@
       <Column Name="[When]" Member="When" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="Todo" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Column Name="AdminID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Column Name="Coment" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Coment" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Association Name="User_Action" Member="User" ThisKey="Whom" OtherKey="ID_User" Type="User" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="User_Action1" Member="User1" ThisKey="AdminID" OtherKey="ID_User" Type="User" IsForeignKey="true" />
       <Association Name="Item_Action" Member="Item" ThisKey="What" OtherKey="ID_Item" Type="Item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
@@ -66,11 +66,18 @@
       <Association Name="User_LogoPass" Member="User" ThisKey="UserID" OtherKey="ID_User" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Misc" Member="Miscs">
+    <Type Name="Misc">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="[Key]" Member="Key" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+    </Type>
+  </Table>
   <Table Name="dbo.Packages" Member="Packages">
     <Type Name="Package">
       <Column Name="ID_Pack" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Coment" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Coment" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Association Name="Package_Item" Member="Items" ThisKey="ID_Pack" OtherKey="Belongs" Type="Item" />
     </Type>
   </Table>
@@ -78,9 +85,7 @@
     <Type Name="Place">
       <Column Name="ID_Place" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="City" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Lati" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="Long" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Picture" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Association Name="Place_Item" Member="Items" ThisKey="ID_Place" OtherKey="Place" Type="Item" />
     </Type>

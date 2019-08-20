@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using sklad56.Models;
 
@@ -9,8 +10,8 @@ namespace sklad56.Controllers
     {
         public IRepository Repository
         {
-            get { return new TestRepository(); }
-            //get { return Service<IRepository>.GetInstance(); }
+            //get { return new TestRepository(); }
+            get { return Service<IRepository>.GetInstance(); }
         }
     }
 
@@ -19,10 +20,12 @@ namespace sklad56.Controllers
         //
         // GET: /Home/
 
-        //[Authorize] - нет необходимости
         public ViewResult Index()
         {
-            return View();
+            var text = Repository.Miscs.FirstOrDefault(x => x.Key == "Start_Page_Text") ?? new Misc(); //ищем в базе текст для главной страницы
+            var header = Repository.Miscs.FirstOrDefault(x => x.Key == "Start_Page_Header") ?? new Misc(); //ищем в базе заголовок
+
+            return View(new IndexModelView(header.Value, text.Value));
         }
 
         //Представления для редактирующих

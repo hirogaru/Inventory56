@@ -1,7 +1,7 @@
 ﻿@model sklad56.Models.PackageViewModel
 
 @{
-    ViewBag.Title = "PackageList";
+    ViewBag.Title = "Комплект " + Model.pack.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
@@ -24,6 +24,8 @@
         <ul class="nav nav-pills nav-stacked">
             <li>@Html.ActionLink("карточки", "UserList", "User")</li>
             <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "Packs", "Package")</li>
+            <li>@Html.ActionLink("места", "Places", "Package")</li>
             <li><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
         </ul>
     </div>
@@ -46,7 +48,21 @@
                     @foreach (var item in Model.items.List)
                     {
                         <tr>
-                            <td><a href="@Url.Action("EquipItem", "Equip", new { ItemID = item.ID_Item })">@item.Itemname @item.Serial</a></td>
+                            <td>
+                                <a href="@Url.Action("EquipItem", "Equip", new { ItemID = item.ID_Item })">@item.Itemname @item.Serial</a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("PlaceList", "Package", new { PlaceID = item.Place })">@item.Place1.Name</a>
+                            </td>
+                            <td class="text-right">
+                                @if ((User.IsInRole(sklad56.Globals.editGroup)) && (item.Username == null) && (item.Place.ToString() != "44444444-4444-4444-4444-444444444444"))
+                                {
+                                    using (Html.BeginForm("AddToCart", "Cart", new { ItemID = item.ID_Item, returnUrl = Request.Url.PathAndQuery }))
+                                    {
+                                        <input type="submit" class="btn btn-xs btn-success " value="К оформлению" />
+                                    }
+                                }
+                            </td>
                         </tr>
                     }
                 </tbody>

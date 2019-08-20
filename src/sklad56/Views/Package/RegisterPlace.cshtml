@@ -1,7 +1,7 @@
-﻿@model sklad56.Models.User
+﻿@model sklad56.Models.Place
 
 @{
-    ViewBag.Title = "Редактирование пользователя";
+    ViewBag.Title = "Редактирование места";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var Edit = (bool)ViewBag.Edit;
 }
@@ -28,37 +28,36 @@
         </ul>
     </div>
     <div class="col-sm-8 content">
-        <h3>Создание/редактирование пользователя</h3>
+        <h3>Создание/редактирование места</h3>
 
-        @using (Html.BeginForm("RegisterUser", "User", new { Edit = Edit }, FormMethod.Post, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm("RegisterPlace", "Package", new { Edit = Edit }, FormMethod.Post, new { @class = "form-horizontal" }))
         {
             <fieldset>
                 <div class="control-group">
-                    @Html.HiddenFor(x => x.ID_User) 
-                    <label class="control-label" for="Username">
-                        <abbr title="Чаще всего записывается в формате Фамилия И.О." class="initialism">Имя пользователя</abbr>
+                    @Html.HiddenFor(x => x.ID_Place)
+                    <label class="control-label" for="Placename">
+                        <abbr title="Данное имя будет отображаться везде, где фигурирует место" class="initialism">Имя места</abbr>
                     </label>
                     <div class="controls">
-                        @Html.TextBox("Username", Model.Username)
-                        @Html.ValidationMessage("Username")
+                        @Html.TextBox("Name", Model.Name)
+                        @Html.ValidationMessage("Name")
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="Post">
-                        <abbr title="Заполняется для облегчения заполнений накладных. Заполняется по желанию" class="initialism">Должность</abbr>
+                    <label class="control-label" for="City">
+                        <abbr title="Населенный пункт, в котором располагается место." class="initialism">Город</abbr>
                     </label>
                     <div class="controls">
-                        @Html.TextBox("Post", Model.Post)
-                        @Html.ValidationMessage("Post")
+                        @Html.TextBox("City", Model.City)
+                        @Html.ValidationMessage("City")
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="Phone">
-                        <abbr title="Заполняется по желанию, но помогает быстрее найти пользователя" class="initialism">Телефон</abbr>
+                    <label class="control-label" for="Picture">
+                        <abbr title="Имя файла, расположенного в папке Content/img. Поле не обязательное" class="initialism">Фото места</abbr>
                     </label>
                     <div class="controls">
-                        @Html.TextBox("Phone", Model.Phone)
-                        @Html.ValidationMessage("Phone")
+                        @Html.TextBox("Picture", Model.Picture)
                     </div>
                 </div>
                 <br />
@@ -66,7 +65,7 @@
                     <button type="submit" class="btn btn-success">
                         Применить
                     </button>
-                    @Html.ActionLink("Cancel", "UserEditList", "User", null, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Cancel", "EditPlaceList", "Package", null, new { @class = "btn btn-primary" })
                 </div>
             </fieldset>
         }

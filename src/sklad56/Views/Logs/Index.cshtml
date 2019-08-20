@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "LogsIndex";
+    ViewBag.Title = "Журнал";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,6 +23,8 @@
         <ul class="nav nav-pills nav-stacked">
             <li>@Html.ActionLink("карточки", "UserList", "User")</li>
             <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "Packs", "Package")</li>
+            <li>@Html.ActionLink("места", "Places", "Package")</li>
             <li class="active"><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
         </ul>
     </div>

@@ -41,7 +41,7 @@ namespace sklad56.Controllers
         {
             get
             {
-                foreach (Package x in Repository.Packages)
+                foreach (Package x in Repository.Packages.OrderBy(x => x.Name))
                 {
                     yield return new SelectListItem()
                     {
@@ -56,7 +56,7 @@ namespace sklad56.Controllers
         {
             List<SelectListItem> UserList = new List<SelectListItem>();
 
-            foreach (User x in Repository.Users)
+            foreach (User x in Repository.Users.OrderBy(x => x.Username))
             {
                 UserList.Add(new SelectListItem() { Text = x.Username });
             }
@@ -124,10 +124,10 @@ namespace sklad56.Controllers
                 ModelState.AddModelError("Serial", "Поле не может быть пустым!");
             }
 
-            var anyItemN = Repository.Items.Any(p => string.Compare(p.Itemname, item.Itemname) == 0);
-            var anyItemS = Repository.Items.Any(p => string.Compare(p.Serial, item.Serial) == 0);
+            var anyItemN = Repository.Items.Any(p => (p.Itemname == item.Itemname) && (p.Serial == item.Serial));
+            
             //проверяем по совпадении имени и серийника, но можно заменить на другие проверки
-            if (anyItemN && anyItemS && !Edit)
+            if (anyItemN && !Edit)
             {
                 ModelState.AddModelError("Serial", "Такой предмет с таким же серийным номером уже существует");
             }
@@ -163,23 +163,26 @@ namespace sklad56.Controllers
             return RedirectToAction("EquipList"); //если предмет не найден - отображаем список предметов
         }
 
-        [ValidateInput(false)]  //по аналогии с UserController, но с сортировкой по типам
-        public ViewResult EquipList(int page = 1, int sorted = 0, string searchString = null)
+        [ValidateInput(false)]  //по аналогии с UserController
+        public ViewResult EquipList(int page = 1, int sorted = 0, int itemsPerPage = 0, string searchString = null)
         {
             //Выводим итемы по их типу (если sorted = 0 то выводим всё подряд)
             var typeItems = sorted != 0 ? Repository.Items.Where(itm => itm.Cast == sorted).OrderBy(name => name.Itemname) : Repository.Items.OrderBy(name => name.Itemname);
 
+            itemsPerPage = itemsPerPage == 0 ? Globals.itemsPerPage : itemsPerPage; //определяем текущее кол-во элементов на странице
+            
+            ViewBag.ItemsPage = itemsPerPage;
             ViewBag.Search = searchString;
             ViewBag.Sorted = sorted;
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 var list = SearchEngine<Item>.Search(searchString, typeItems).AsQueryable();
-                var data = new PageableData<Item>(list, page, Globals.itemsPerPage);
+                var data = new PageableData<Item>(list, page, itemsPerPage);
                 return View(data); //выводим результаты поиска
             }
             else
             {
-                var data = new PageableData<Item>(typeItems, page, Globals.itemsPerPage);
+                var data = new PageableData<Item>(typeItems, page, itemsPerPage);
                 return View(data); //отображаем список предметов
             }
         }
@@ -202,9 +205,11 @@ namespace sklad56.Controllers
             var data = Repository.Items.Where(x => x.Username == UserId).ToList();
             List<EquipListViewModel> datoz = new List<EquipListViewModel>();
 
+            var actions = Repository.Actions.OrderBy(date => date.When); //сортируем действия по дате
+
             foreach (var x in data)
             {
-                var act = Repository.Actions.ToList().LastOrDefault(g => (g.What == x.ID_Item) && (g.Todo == 1)); //ищем последнее действие принятия, связанное с предметом
+                var act = actions.ToList().LastOrDefault(g => (g.What == x.ID_Item) && (g.Todo == 1)); //ищем последнее действие принятия, связанное с предметом
 
                 if (act != null) datoz.Add(new EquipListViewModel { item = x, date = act.When });
                 else datoz.Add(new EquipListViewModel { item = x, date = null });
@@ -290,8 +295,20 @@ namespace sklad56.Controllers
                 if (lose) act.Todo = (byte)Enums.Todo.lost;
                 Repository.CreateAct(act); //оставить запись об возвращении предмета
 
+                Place defPlace;
+                try
+                {
+                    string defPlaceID = defPlaceID = Repository.Miscs.FirstOrDefault(x => x.Key == "Main_Storage_Id").Value;
+                    defPlace = Repository.Places.First(x => x.ID_Place.ToString() == defPlaceID); //ищем основной склад (по умолчанию - комната 403)
+                }
+                catch 
+                {
+                    defPlace = Repository.Places.FirstOrDefault(x => x.ID_Place.ToString() == "44444444-4444-4444-4444-444444444444"); //если не нашли - назначаем неизвесное место
+                } 
+
                 itm.User = null; //убрать пользователя
                 if (lose) itm.Place1 = Repository.Places.Single(x => x.ID_Place.ToString() == "44444444-4444-4444-4444-444444444444"); //потерять предмет если надо
+                else itm.Place1 = defPlace; //или привязать его к месту по умолчанию
                 if (broke) itm.Broken = true; //а если надо сломать - то сломать)
                 Repository.UpdateItem(itm);
             }
@@ -299,10 +316,12 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public ViewResult ReturnList(int page = 1, string coment = null)
+        public ViewResult ReturnList(int page = 1, int sorted = 0, string coment = null)
         {
             ViewBag.Coment = coment;
-            var sortedItems = Repository.Items.Where(itm => itm.Username != null).OrderBy(name => name.Itemname).AsQueryable(); //создаём список предметов на руках у пользователей
+            ViewBag.Sorted = sorted;
+            var Items = Repository.Items.Where(itm => itm.Username != null); //создаём список предметов на руках у пользователей
+            var sortedItems = sorted == 0 ? Items.OrderBy(name => name.Itemname).AsQueryable() : Items.OrderBy(user => user.User.Username).AsQueryable(); //сортируем его
             return View(new PageableData<Item>(sortedItems, page, Globals.itemsPerPage)); //отображаем список
         }
 

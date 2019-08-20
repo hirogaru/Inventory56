@@ -1,10 +1,11 @@
 ﻿@model sklad56.Models.PageableData<sklad56.Models.Item>
 
 @{
-    ViewBag.Title = "EquipList";
+    ViewBag.Title = "Список оборудования";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var searchString = (string)ViewBag.Search;
     var sortVar = (int)ViewBag.Sorted;
+    var ItemsPage = (int)ViewBag.ItemsPage;
 }
 <div class="row">
     <div class="col-sm-2">
@@ -26,21 +27,47 @@
         <ul class="nav nav-pills nav-stacked">
             <li>@Html.ActionLink("карточки", "UserList", "User")</li>
             <li class="active">@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "Packs", "Package")</li>
+            <li>@Html.ActionLink("места", "Places", "Package")</li>
             <li><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
         </ul>
     </div>
     <div class="col-sm-9 content">
         <div class="pull-right">
-            @using (Html.BeginForm("EquipList", "Equip", new { sorted = sortVar}, FormMethod.Post, new { @class = "form-search" }))
+            @using (Html.BeginForm("EquipList", "Equip", new { sorted = sortVar, itemsPerPage = ItemsPage }, FormMethod.Post, new { @class = "form-search" }))
             {
                 @Html.TextBox("searchString", searchString ?? "", new { @class = "input-medium search-query" })
                 <button type="submit" class="btn btn-default">Поиск</button>
             }
+            <br>
+            Элементов на странице: &nbsp;
+            @if (ItemsPage != 20)
+            {
+                <a href="@Url.Action("EquipList", "Equip", new { sorted = sortVar, searchString = searchString, itemsPerPage = 20 })">20</a>
+            }
+            else
+            { <i>20</i> }
+            &nbsp;
+            @if (ItemsPage != 50)
+            {
+                <a href="@Url.Action("EquipList", "Equip", new { sorted = sortVar, searchString = searchString, itemsPerPage = 50 })">50</a>
+            }
+            else
+            { <i>50</i> }
         </div>
         <h3>Список оборудования</h3>
+        
         @for (byte i = 0; i <= sklad56.Models.Enums.castCount; i++)
         {
-            <text>|</text> <a href="@Url.Action("EquipList", new { sorted = i, searchString = searchString })">@i.ToEnumTyp()</a> 
+            <text>|</text> 
+            if (sortVar != i)
+            {
+                <a href="@Url.Action("EquipList", new { sorted = i, itemsPerPage = ItemsPage, searchString = searchString })">@i.ToEnumTyp()</a> 
+            }
+            else
+            {
+                <text>@i.ToEnumTyp()</text>
+            }
         }
         |
         <table class="table table-striped table-condensed">
@@ -49,6 +76,9 @@
                 <tr>
                     <td>
                         <a href="@Url.Action("EquipItem", "Equip", new { ItemID = item.ID_Item })">@item.Itemname @item.Serial</a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("PlaceList", "Package", new { PlaceID = item.Place })">@item.Place1.Name</a>
                     </td>
                     <td class="text-right">
                         @if ((User.IsInRole(sklad56.Globals.editGroup)) && (item.Username == null) && (item.Place.ToString() != "44444444-4444-4444-4444-444444444444"))
@@ -62,8 +92,9 @@
                 </tr>
             }
         </table>
+
         <div class="pagination">
-            @Html.PageLinks(Model.PageNo, Model.CountPage, x => Url.Action("EquipList", new { page = x, sorted = sortVar ,searchString = searchString }))
+            @Html.PageLinks(Model.PageNo, Model.CountPage, x => Url.Action("EquipList", new { page = x, sorted = sortVar, itemsPerPage = ItemsPage, searchString = searchString }))
         </div>
 
     </div>

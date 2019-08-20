@@ -1,7 +1,7 @@
 ﻿@model sklad56.Models.Item
 
 @{
-    ViewBag.Title = "EquipItem";
+    ViewBag.Title = "Карточка предмета";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -25,6 +25,8 @@
         <ul class="nav nav-pills nav-stacked">
             <li>@Html.ActionLink("карточки", "UserList", "User")</li>
             <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "Packs", "Package")</li>
+            <li>@Html.ActionLink("места", "Places", "Package")</li>
             <li><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
         </ul>
     </div>
@@ -33,12 +35,11 @@
         <table class="breadcrumb">
             <tbody>
                 <tr>
-                    <td width="40" height="45">
-                        &nbsp;
+                    <td width="40" class="text-right">
                         <img src="~/Content/img/itmico.png" width="35" height="35" class="img-polaroid">
                     </td>
-                    <td width ="100" height="45" class="text-right">@Model.Itemname</td>
-                    <td width="180" height="45">
+                    <td width ="180" height="45" class="text-right">@Model.Itemname</td>
+                    <td width="200" height="45">
                         &nbsp;@Model.Serial&nbsp;
                         @if (User.IsInRole(sklad56.Globals.editGroup))
                         {
@@ -46,10 +47,10 @@
                         <span class="label label-info"><a href="@Url.Action("EditItem", "Equip", new { ItemID = Model.ID_Item })">...</a></span>
                         }
                     </td>
-                    <td width="160" height="45" class="text-center">
+                    <td width="130" height="45" class="text-center">
                         @Model.Cast.ToEnumTyp()
                     </td>
-                    <td width="160" height="45" class="text-center">
+                    <td width="120" height="45" class="text-center">
                         @{
                             if (Model.Broken == true)
                             {
@@ -63,10 +64,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="160" height="45" colspan="2" class="text-center">
+                    <td width="210" height="45" colspan="2" class="text-center">
                         <a href="@Url.Action("PackageList", "Package", new { PackID = Model.Belongs })">@Model.Package.Name</a>
                     </td>
-                    <td width="160" height="45" class="text-center">
+                    <td width="210" height="45" class="text-center">
                         @{
                             if (Model.Username == null)
                             {
@@ -91,10 +92,10 @@
                             }
                         }
                     </td>
-                    <td width="160" height="45" class="text-center">
+                    <td width="130" height="45" class="text-center">
                         <a href="@Url.Action("PlaceList", "Package", new { PlaceID = Model.Place })">@Model.Place1.Name</a>
                     </td>
-                    <td width="160" height="45" class="text-center">
+                    <td width="120" height="45" class="text-center">
                         @{
                             if (Model.Verifi == null)
                             {

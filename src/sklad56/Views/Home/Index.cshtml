@@ -1,4 +1,6 @@
-﻿@{
+﻿@model sklad56.Models.IndexModelView
+
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -23,11 +25,14 @@
         <ul class="nav nav-pills nav-stacked">
             <li>@Html.ActionLink("карточки", "UserList", "User")</li>
             <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "Packs", "Package")</li>
+            <li>@Html.ActionLink("места", "Places", "Package")</li>
             <li><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
         </ul>
     </div>
     <div class="col-sm-9 content">
-        <h3> </h3>
-        <p> </p>
+        <br />
+        <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Model.header</h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Model.text</p>
     </div>
 </div>

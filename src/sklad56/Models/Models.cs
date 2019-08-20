@@ -136,10 +136,12 @@ namespace sklad56.Models
             Station,	//Приёмная станция
             Notebook,	//Ноутбук
             AFS,		//АФС
-            Power       //Питание
+            Power,      //Питание
+            Measuring,	//Измерительные приборы
+            Cords       //Жгуты
         }
 
-        public static byte castCount = 5; //кол-во возможных типов оборудования
+        public static byte castCount = 7; //кол-во возможных типов оборудования
     }
 
     public class EquipListViewModel 
@@ -191,6 +193,20 @@ namespace sklad56.Models
         public string user { get; set; }
 
         public List<SelectListItem> users { get; set; }
+    }
+
+    public class IndexModelView
+    {
+        //модель отображения стартовой страницы
+        public string header;
+        
+        public string text;
+        
+        public IndexModelView(string h, string t)
+        {
+            header = h;
+            text = t;
+        }
     }
 
     public class EditVeryfiViewModel

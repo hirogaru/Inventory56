@@ -1,7 +1,7 @@
 ﻿@model sklad56.Models.CartIndexViewModel
 
 @{
-    ViewBag.Title = "CartIndex";
+    ViewBag.Title = "Оформление";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -67,10 +67,10 @@
         {
             <table align="center">
                 <tr>
-                <td rowspan="2" valign="top">
+                <td rowspan="3" valign="top">
                     <label class="checkbox">
                         <input type="checkbox" value="" class="disabled">
-                        При оформлении действия распечатать накладную &nbsp; &nbsp;
+                        При оформлении действия распечатать накладную &nbsp; &nbsp; &nbsp; &nbsp;
                     </label>
                 </td>
                 <td>
@@ -86,6 +86,14 @@
                     </td>
                     <td>
                         <p>@Html.TextBoxFor(md => md.Coment)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p align=right><b>Куда: &nbsp;</b></p>
+                    </td>
+                    <td>
+                        <p>@Html.DropDownListFor(md => md.Place, Model.Places)</p>
                     </td>
                 </tr>
             </table>

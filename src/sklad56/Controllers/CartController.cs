@@ -9,23 +9,40 @@ namespace sklad56.Controllers
     public class CartController : BaseController
     {
         // GET: Cart
+        
+        private List<SelectListItem> GetUserList()
+        {
+            List<SelectListItem> UserList = new List<SelectListItem>();
+
+            foreach (User x in Repository.Users.OrderBy(x => x.Username))
+            {
+                UserList.Add(new SelectListItem() { Text = x.Username });
+            }
+            return UserList;
+        }
+
+        private List<SelectListItem> GetPlaceList()
+        {
+            List<SelectListItem> PlaceList = new List<SelectListItem>();
+
+            foreach (Place x in Repository.Places.OrderBy(x => x.Name))
+            {
+                PlaceList.Add(new SelectListItem() { Text = x.Name });
+            }
+            return PlaceList;
+        }
+        
         [Authorize(Roles = Globals.editGroup)]
         public ActionResult Index(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty()) returnUrl = Url.Action("EquipList", "Equip");
 
-            List<SelectListItem> UserList = new List<SelectListItem>();
-
-            foreach (User x in Repository.Users)
-            {
-                UserList.Add(new SelectListItem() { Text = x.Username });
-            }
-
             return View(new CartIndexViewModel //отображаем корзину
             {
                 Cart = GetCart(),
                 ReturnUrl = returnUrl,
-                Users = UserList
+                Users = GetUserList(),
+                Places = GetPlaceList()
             });
         }
 
@@ -47,6 +64,14 @@ namespace sklad56.Controllers
             {
                 ViewBag.rurl = Url.Action("Index");
                 ModelState.AddModelError("EmptyCart", "Такой пользователь не найден. Укажите другого пользователя");
+                return View();
+            }
+
+            var plc = Repository.Places.ToList().FirstOrDefault(g => g.Name == result.Place);
+            if (plc == null) //проверяем, есть ли такое место
+            {
+                ViewBag.rurl = Url.Action("Index");
+                ModelState.AddModelError("EmptyCart", "Указанное место в базе не обнаружено, укажите другое место");
                 return View();
             }
 
@@ -74,6 +99,7 @@ namespace sklad56.Controllers
                     act.Coment = result.Coment; //действие зарегистрировали
 
                     x.item.User = usr;  //назначаем нового пользователя предмету
+                    x.item.Place1 = plc; //переписываем место предмету
 
                     Repository.UpdateItem(x.item);
                     Repository.CreateAct(act);

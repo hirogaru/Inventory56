@@ -9,6 +9,7 @@ namespace sklad56.Tools
         //Преобразует многострочные данные
         public static MvcHtmlString NlToBr(this string source)
         {
+            var eak = Guid.NewGuid();
             if (string.IsNullOrWhiteSpace(source))
             {
                 return new MvcHtmlString(string.Empty);
@@ -94,6 +95,12 @@ namespace sklad56.Tools
                     break;
                 case 5:
                     rez = "Питание";
+                    break;
+                case 6:
+                    rez = "Измерительный прибор";
+                    break;
+                case 7:
+                    rez = "Жгуты";
                     break;
             }
             return rez;

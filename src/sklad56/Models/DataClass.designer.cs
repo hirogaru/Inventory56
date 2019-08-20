@@ -48,6 +48,9 @@ namespace sklad56.Models
     partial void InsertLogoPass(LogoPass instance);
     partial void UpdateLogoPass(LogoPass instance);
     partial void DeleteLogoPass(LogoPass instance);
+    partial void InsertMisc(Misc instance);
+    partial void UpdateMisc(Misc instance);
+    partial void DeleteMisc(Misc instance);
     partial void InsertPackage(Package instance);
     partial void UpdatePackage(Package instance);
     partial void DeletePackage(Package instance);
@@ -131,6 +134,14 @@ namespace sklad56.Models
 			get
 			{
 				return this.GetTable<LogoPass>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Misc> Miscs
+		{
+			get
+			{
+				return this.GetTable<Misc>();
 			}
 		}
 		
@@ -337,7 +348,7 @@ namespace sklad56.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Coment", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Coment", DbType="VarChar(MAX)")]
 		public string Coment
 		{
 			get
@@ -1526,6 +1537,116 @@ namespace sklad56.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Misc")]
+	public partial class Misc : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Key;
+		
+		private string _Value;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnKeyChanging(string value);
+    partial void OnKeyChanged();
+    partial void OnValueChanging(string value);
+    partial void OnValueChanged();
+    #endregion
+		
+		public Misc()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[Key]", Storage="_Key", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Key
+		{
+			get
+			{
+				return this._Key;
+			}
+			set
+			{
+				if ((this._Key != value))
+				{
+					this.OnKeyChanging(value);
+					this.SendPropertyChanging();
+					this._Key = value;
+					this.SendPropertyChanged("Key");
+					this.OnKeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		public string Value
+		{
+			get
+			{
+				return this._Value;
+			}
+			set
+			{
+				if ((this._Value != value))
+				{
+					this.OnValueChanging(value);
+					this.SendPropertyChanging();
+					this._Value = value;
+					this.SendPropertyChanged("Value");
+					this.OnValueChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Packages")]
 	public partial class Package : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1598,7 +1719,7 @@ namespace sklad56.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Coment", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Coment", DbType="VarChar(MAX)")]
 		public string Coment
 		{
 			get
@@ -1676,10 +1797,6 @@ namespace sklad56.Models
 		
 		private string _Name;
 		
-		private System.Nullable<double> _Lati;
-		
-		private System.Nullable<double> _Long;
-		
 		private string _Picture;
 		
 		private EntitySet<Item> _Items;
@@ -1694,10 +1811,6 @@ namespace sklad56.Models
     partial void OnCityChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnLatiChanging(System.Nullable<double> value);
-    partial void OnLatiChanged();
-    partial void OnLongChanging(System.Nullable<double> value);
-    partial void OnLongChanged();
     partial void OnPictureChanging(string value);
     partial void OnPictureChanged();
     #endregion
@@ -1748,7 +1861,7 @@ namespace sklad56.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -1764,46 +1877,6 @@ namespace sklad56.Models
 					this._Name = value;
 					this.SendPropertyChanged("Name");
 					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Lati", DbType="Float")]
-		public System.Nullable<double> Lati
-		{
-			get
-			{
-				return this._Lati;
-			}
-			set
-			{
-				if ((this._Lati != value))
-				{
-					this.OnLatiChanging(value);
-					this.SendPropertyChanging();
-					this._Lati = value;
-					this.SendPropertyChanged("Lati");
-					this.OnLatiChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Long", DbType="Float")]
-		public System.Nullable<double> Long
-		{
-			get
-			{
-				return this._Long;
-			}
-			set
-			{
-				if ((this._Long != value))
-				{
-					this.OnLongChanging(value);
-					this.SendPropertyChanging();
-					this._Long = value;
-					this.SendPropertyChanged("Long");
-					this.OnLongChanged();
 				}
 			}
 		}

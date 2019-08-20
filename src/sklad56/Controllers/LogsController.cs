@@ -15,9 +15,12 @@ namespace sklad56.Controllers
             return View();
         }
 
-        public ViewResult LogList(int page = 1, int sort = 0)
+        public ViewResult LogList(int page = 1, int sort = 0, int itemsPerPage = 0)
         {
+            itemsPerPage = itemsPerPage == 0 ? Globals.itemsPerPage : itemsPerPage; //определяем текущее кол-во элементов на странице
+            
             ViewBag.sort = sort;
+            ViewBag.ItemsPage = itemsPerPage;
             IQueryable<Models.Action> actions;
             switch (sort)
             {
@@ -37,14 +40,14 @@ namespace sklad56.Controllers
                     actions = Repository.Actions.OrderByDescending(name => name.When);
                     break;
             }
-            var data = new PageableData<Models.Action>(actions, page, Globals.itemsPerPage);
+            var data = new PageableData<Models.Action>(actions, page, itemsPerPage);
             return View(data);  //выводим лог список 
         }
 
         [ChildActionOnly]
         public ActionResult itemLog(Guid ItemID)
         {
-            var actions = Repository.Actions.Where( x => x.What == ItemID).OrderByDescending(name => name.When).ToList();
+            var actions = Repository.Actions.Where( x => x.What == ItemID).OrderByDescending(itm => itm.When).ToList();
             return PartialView(actions); //выводим все действия связанные с предметом
         }
 
@@ -56,10 +59,10 @@ namespace sklad56.Controllers
         }
 
         [Authorize(Roles = Globals.editGroup)]
-        public RedirectToRouteResult DeleteAction(Guid ActID)
+        public RedirectResult DeleteAction(Guid ActID, string returnUrl)
         {
             Repository.RemoveAct(ActID); //удаляем действие из базы
-            return RedirectToAction("LogList");
+            return Redirect(returnUrl);
         }
     }
 }

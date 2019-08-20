@@ -1,7 +1,7 @@
 ﻿@model sklad56.Models.PageableData<sklad56.Models.User>
 
 @{
-    ViewBag.Title = "UserEditList";
+    ViewBag.Title = "Список пользователей";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,6 +23,7 @@
             <li class="active">@Html.ActionLink("пользователи", "UserEditList", "User")</li>
             <li>@Html.ActionLink("предметы", "EquipEditList", "Equip")</li>
             <li>@Html.ActionLink("комплекты", "EditList", "Package")</li>
+            <li>@Html.ActionLink("места", "EditPlaceList", "Package")</li>
         </ul>
     </div>
     <div class="col-sm-7 content">

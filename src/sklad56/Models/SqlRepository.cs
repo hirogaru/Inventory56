@@ -12,6 +12,8 @@ namespace sklad56.Models
 
         IQueryable<InCharge> InCharges { get; }
 
+        IQueryable<Misc> Miscs { get; }
+
         IQueryable<DelData> DelDatas { get; }
 
         #region LogoPass
@@ -39,6 +41,12 @@ namespace sklad56.Models
         #region Place
 
         IQueryable<Place> Places { get; }
+
+        bool CreatePlace(Place instance);
+
+        bool UpdatePlace(Place instance);
+
+        bool RemovePlace(System.Guid idPlace);
 
         #endregion 
 
@@ -91,6 +99,14 @@ namespace sklad56.Models
             get
             {
                 return Db.InCharges;
+            }
+        }
+
+        public IQueryable<Misc> Miscs
+        {
+            get
+            {
+                return Db.Miscs;
             }
         }
 
@@ -274,6 +290,57 @@ namespace sklad56.Models
                 return Db.Places;
             }
         }
+
+        public bool CreatePlace(Place instance)
+        {
+            if (instance.ID_Place != Guid.Empty)
+            {
+                Db.Places.InsertOnSubmit(instance);
+                Db.Places.Context.SubmitChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool UpdatePlace(Place instance)
+        {
+            Place cache = Db.Places.Where(p => p.ID_Place == instance.ID_Place).FirstOrDefault();
+            if (cache != null)
+            {
+                cache.ID_Place = instance.ID_Place;
+                cache.Name = instance.Name;
+                cache.City = instance.City;
+                cache.Picture = instance.Picture;
+                Db.Places.Context.SubmitChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool RemovePlace(System.Guid idPlace)
+        {
+            Place instance = Db.Places.Where(p => p.ID_Place == idPlace).FirstOrDefault();
+            if (instance != null)
+            {
+                DelData backup = new DelData()
+                {
+                    DeletedData = "Place" +
+                    "|" + instance.ID_Place.ToString() +
+                    "|" + instance.Name +
+                    "|" + instance.City +
+                    "|" + instance.Picture
+                };
+                Db.DelDatas.InsertOnSubmit(backup); //бэкапим данные
+
+                Db.Places.DeleteOnSubmit(instance);
+                Db.Places.Context.SubmitChanges();
+                return true;
+            }
+
+            return false;
+        }
         
         public IQueryable<Action> Actions
         {
@@ -384,6 +451,8 @@ namespace sklad56.Models
     {
         public IQueryable<DelData> DelDatas { get; set; }
 
+        public IQueryable<Misc> Miscs { get { return (new List<Misc> { }).AsQueryable(); } }
+
         public IQueryable<InCharge> InCharges { get; set; }
 
         public IQueryable<LogoPass> LogoPasses { get; private set; }
@@ -423,6 +492,21 @@ namespace sklad56.Models
             ID_Place = Guid.Parse("14444444-4444-4444-4444-444444444444"),
             Picture = "oblivion.png",
             City = "TestTown" } }).AsQueryable(); } }
+
+        public bool CreatePlace(Place instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool UpdatePlace(Place instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool RemovePlace(Guid idPlace)
+        {
+            throw new System.NotImplementedException();
+        }
 
         public IQueryable<Item> Items { get { return (new List<Item> { new Item { 
             Itemname = "TestItem", 

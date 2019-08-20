@@ -150,6 +150,9 @@
     </Compile>
     <Compile Include="Models\AuthorizationService.cs" />
     <Compile Include="Models\Cart.cs" />
+    <Compile Include="Models\DataClass.cs">
+      <DependentUpon>DataClass.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataClass.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -173,10 +176,15 @@
     <Content Include="Content\img\208.png" />
     <Content Include="Content\img\20810.png" />
     <Content Include="Content\img\403.png" />
+    <Content Include="Content\img\achtub.png" />
+    <Content Include="Content\img\dvinsk.png" />
     <Content Include="Content\img\itmico.png" />
+    <Content Include="Content\img\morsk.png" />
     <Content Include="Content\img\oblivion.png" />
+    <Content Include="Content\img\prio.png" />
     <Content Include="Content\img\user.png" />
     <Content Include="Content\img\usrico.png" />
+    <Content Include="Content\img\znam.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -260,6 +268,10 @@
     <Content Include="Views\Cart\Finish.cshtml" />
     <Content Include="Views\Equip\HandOn.cshtml" />
     <Content Include="Views\Equip\EditVeryfi.cshtml" />
+    <Content Include="Views\Package\Packs.cshtml" />
+    <Content Include="Views\Package\Places.cshtml" />
+    <Content Include="Views\Package\EditPlaceList.cshtml" />
+    <Content Include="Views\Package\RegisterPlace.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

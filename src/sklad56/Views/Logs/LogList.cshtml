@@ -1,9 +1,10 @@
 ﻿@model sklad56.Models.PageableData<sklad56.Models.Action>
 
 @{
-    ViewBag.Title = "LogsIndex";
+    ViewBag.Title = "Журнал";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var sortVar = (int)ViewBag.sort;
+    var ItemsPage = (int)ViewBag.ItemsPage;
 }
 
 <div class="row">
@@ -26,21 +27,40 @@
         <ul class="nav nav-pills nav-stacked">
             <li>@Html.ActionLink("карточки", "UserList", "User")</li>
             <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "Packs", "Package")</li>
+            <li>@Html.ActionLink("места", "Places", "Package")</li>
             <li class="active"><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
         </ul>
     </div>
     <div class="col-sm-9 tab-content">
         <h3>Записи действий на складе</h3>
 
+        <div class="pull-right">
+            Элементов на странице: &nbsp;
+            @if (ItemsPage != 20)
+            {
+                <a href="@Url.Action("LogList", "Logs", new { sorted = sortVar, itemsPerPage = 20 })">20</a>
+            }
+            else
+            { <i>20</i> }
+            &nbsp;
+            @if (ItemsPage != 50)
+            {
+                <a href="@Url.Action("LogList", "Logs", new { sorted = sortVar, itemsPerPage = 50 })">50</a>
+            }
+            else
+            { <i>50</i> }
+        </div>
+
         <table class="table table-condensed">
             <thread>
                 <tr class="info">
-                    <th width="130"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 1 })">Пользователь</a></th>
-                    <th width="120"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 2 })">Предмет</a></th>
-                    <th width="80"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 3 })">Действие</a></th>
-                    <th width="80"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 4 })">Дата</a></th>
-                    <th width="160">Комментарий</th>
-                    <th width="130">Регистратор</th>
+                    <th width="130"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 1, itemsPerPage = ItemsPage })">Пользователь</a></th>
+                    <th width="120"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 2, itemsPerPage = ItemsPage })">Предмет</a></th>
+                    <th width="80"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 3, itemsPerPage = ItemsPage })">Действие</a></th>
+                    <th width="80"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 4, itemsPerPage = ItemsPage })">Дата</a></th>
+                    <th width="170">Комментарий</th>
+                    <th width="120">Регистратор</th>
                 </tr>
             </thread>
             <tbody>
@@ -56,7 +76,7 @@
                         @act.User1.Username
                         @if (User.IsInRole(sklad56.Globals.editGroup))
                         {
-                            <span class="label label-warning"><a href="@Url.Action("DeleteAction", "Logs", new { ActID = act.ID_Act })">&nbsp;-&nbsp;</a></span>
+                            <span class="label label-warning"><a href="@Url.Action("DeleteAction", "Logs", new { ActID = act.ID_Act, returnUrl = Request.Url.PathAndQuery })">&nbsp;-&nbsp;</a></span>
                         }
                         </td>
                     </tr>
@@ -64,7 +84,7 @@
             </tbody>
         </table>
         <div class="pagination">
-            @Html.PageLinks(Model.PageNo, Model.CountPage, x => Url.Action("LogList", new { page = x, sort = sortVar }))
+            @Html.PageLinks(Model.PageNo, Model.CountPage, x => Url.Action("LogList", new { page = x, sort = sortVar, itemsPerPage = ItemsPage }))
         </div>
     </div>
 </div>

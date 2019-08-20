@@ -51,18 +51,25 @@ namespace sklad56.Controllers
         }
         
         [ValidateInput(false)]  //Аттрибут отключает проверку (чтоб не возникало HttpRequestValidationException)
-        public ViewResult UserList(int page = 1, string searchString = null)
+        public ViewResult UserList(int page = 1, int sorted = 0, int itemsPerPage = 0, string searchString = null)
         {
+            //Сортируем пользователей по полю (сортед = 1 - по должности)
+            var sortItems = sorted == 0 ? Repository.Users.OrderBy(name => name.Username) : Repository.Users.OrderByDescending(name => name.Post);
+            
+            itemsPerPage = itemsPerPage == 0 ? Globals.itemsPerPage : itemsPerPage; //определяем текущее кол-во элементов на странице
+
+            ViewBag.ItemsPage = itemsPerPage;
+            ViewBag.Sorted = sorted;
             ViewBag.Search = searchString;
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                var list = SearchEngine<User>.Search(searchString, Repository.Users.OrderBy(name => name.Username)).AsQueryable();
-                var data = new PageableData<User>(list, page, Globals.itemsPerPage);
+                var list = SearchEngine<User>.Search(searchString, sortItems).AsQueryable();
+                var data = new PageableData<User>(list, page, itemsPerPage);
                 return View(data); //выводим результаты поиска
             }
             else
             {
-                var data = new PageableData<User>(Repository.Users.OrderBy(name => name.Username), page, Globals.itemsPerPage);
+                var data = new PageableData<User>(sortItems, page, itemsPerPage);
                 return View(data);  //выводим список пользователей
             }
         }

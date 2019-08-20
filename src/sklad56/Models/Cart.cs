@@ -78,6 +78,10 @@ namespace sklad56.Models
 
         public string User { get; set; }
 
+        public string Place { get; set; }
+
+        public List<SelectListItem> Places { get; set; }
+
         public List<SelectListItem> Users { get; set; }
     }
 }

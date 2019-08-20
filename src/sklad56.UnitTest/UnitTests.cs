@@ -28,10 +28,11 @@ namespace sklad56.UnitTest
         public void EquipListTest()
         {
             EquipController controller = new EquipController();
-            ViewResult result = controller.EquipList(page: 1, sorted: 2, searchString: "бор");
+            ViewResult result = controller.EquipList(page: 1, sorted: 2, searchString: "бор", itemsPerPage: 50);
             Assert.AreEqual("", result.ViewName); //проверяем по имени результата
             Assert.AreEqual(2, result.ViewBag.Sorted);//проверяем вьюбэг
             Assert.AreEqual("бор", result.ViewBag.Search);
+            Assert.AreEqual(50, result.ViewBag.ItemsPage);
             Assert.IsInstanceOfType(result.ViewData.Model, typeof(PageableData<Item>)); //проверяем по типу модели
         }
 
@@ -88,9 +89,11 @@ namespace sklad56.UnitTest
         public void UserListTest()
         {
             UserController controller = new UserController();
-            ViewResult result = controller.UserList(page: 1, searchString: "ов");
+            ViewResult result = controller.UserList(page: 1,sorted: 1, itemsPerPage: 50, searchString: "ов");
             Assert.AreEqual("", result.ViewName);
-            Assert.AreEqual("ов", result.ViewBag.Search);//проверяем вьюбэг
+            Assert.AreEqual("ов", result.ViewBag.Search); //проверяем вьюбэг
+            Assert.AreEqual(1, result.ViewBag.Sorted);
+            Assert.AreEqual(50, result.ViewBag.ItemsPage);
             Assert.IsInstanceOfType(result.ViewData.Model, typeof(PageableData<User>)); //проверяем по типу модели
         }
 
@@ -136,9 +139,10 @@ namespace sklad56.UnitTest
         public void LogListTest()
         {
             var controller = new LogsController();
-            var result = controller.LogList(page: 1, sort: 4);
+            var result = controller.LogList(page: 1, sort: 4, itemsPerPage: 50);
             Assert.AreEqual("", result.ViewName);
             Assert.AreEqual(4, result.ViewBag.sort);
+            Assert.AreEqual(50, result.ViewBag.ItemsPage);
             Assert.IsInstanceOfType(result.ViewData.Model, typeof(PageableData<sklad56.Models.Action>));
         }
 
@@ -178,13 +182,13 @@ namespace sklad56.UnitTest
         {
             var controller = new PackageController();
             var ID = Guid.Parse("14444444-4444-4444-4444-444444444444"); 
-            ActionResult result1 = controller.PackageList(ID, page: 1);
+            ActionResult result1 = controller.PackageList(ID, page: 1); //страница комплекта
             Assert.IsInstanceOfType(result1, typeof(ViewResult));
             ViewResult view1 = result1 as ViewResult;
             Assert.AreEqual("", view1.ViewName);
             Assert.IsInstanceOfType(view1.ViewData.Model, typeof(PackageViewModel));
 
-            var result2 = controller.PlaceList(ID, page: 1);
+            var result2 = controller.PlaceList(ID, page: 1); //страница места
             Assert.IsInstanceOfType(result2, typeof(ViewResult));
             var view2 = result2 as ViewResult;
             Assert.AreEqual("", view2.ViewName);
@@ -214,6 +218,22 @@ namespace sklad56.UnitTest
             var view = controller.Index();
             Assert.AreEqual("", view.ViewName);
         }
+
+        /// <summary>
+        /// Две одинаковые страницы списков. Поведение одинаково, поэтому проверяются в одном методе
+        /// </summary>
+        [TestMethod]
+        public void PacksTest()
+        {
+            var controller = new PackageController();
+            var view1 = controller.Packs(); //список комплектов
+            Assert.AreEqual("", view1.ViewName); 
+            Assert.IsInstanceOfType(view1.ViewData.Model, typeof(List<Package>));
+            
+            var view2 = controller.Places();
+            Assert.AreEqual("", view2.ViewName); //список мест
+            Assert.IsInstanceOfType(view2.ViewData.Model, typeof(List<Place>));
+        }
     }
 
     [TestClass]
@@ -229,6 +249,7 @@ namespace sklad56.UnitTest
             var controller = new HomeController();
             var view = controller.Index();
             Assert.AreEqual("", view.ViewName);
+            Assert.IsInstanceOfType(view.ViewData.Model, typeof(IndexModelView));
         }
 
         [TestMethod]
