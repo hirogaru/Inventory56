@@ -1,0 +1,71 @@
+﻿@model sklad56.Models.User
+
+@{
+    ViewBag.Title = "RegisterUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                <li class="active"><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                <li><a href="@Url.Action("Movements", "Home")">Операции</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("пользователи", "UserEditList", "User")</li>
+            <li>@Html.ActionLink("предметы", "EquipEditList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "EditList", "Package")</li>
+        </ul>
+    </div>
+    <div class="col-sm-8 content">
+        <h3>Создание/редактирование пользователя</h3>
+
+        @using (Html.BeginForm("RegisterUser", "User", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="Username">
+                        <abbr title="Чаще всего записывается в формате Фамилия И.О." class="initialism">Имя пользователя</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.TextBox("Username", Model.Username)
+                        @Html.ValidationMessage("Username")
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="Post">
+                        <abbr title="Заполняется по желанию" class="initialism">Должность</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.TextBox("Post", Model.Post)
+                        @Html.ValidationMessage("Post")
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="Phone">
+                        <abbr title="Заполняется по желанию, но помогает быстрее найти пользователя" class="initialism">Телефон</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.TextBox("Phone", Model.Phone)
+                        @Html.ValidationMessage("Phone")
+                    </div>
+                </div>
+                <br />
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        применить
+                    </button>
+                    @Html.ActionLink("Cancel", "UserEditList", "User", null, new { @class = "btn" })
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>

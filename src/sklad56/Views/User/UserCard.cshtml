@@ -1,0 +1,90 @@
+﻿@model sklad56.Models.User
+
+@{
+    ViewBag.Title = "UserCard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var log = (int)ViewBag.Log;
+}
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                @if (User.IsInRole(sklad56.Globals.editGroup))
+                {
+                    <li><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                    <li>@Html.ActionLink("Операции", "Movements", "Home")</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("карточки", "UserList", "User")</li>
+            <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-8 tab-content">
+        <h3>Карточка пользователя</h3>
+        <table class="breadcrumb">
+            <tr height="40">
+                <td width="60" class="text-center">
+                    @*ID=@Model.user.ID_User*@
+                </td>
+                <td colspan="2" width="190" class="text-left">
+                    @Model.Username &emsp;
+                    @if (User.IsInRole(sklad56.Globals.editGroup))
+                    {
+                        <span class="label label-danger">&nbsp;x&nbsp;</span>
+                        <span class="label label-info">...</span>
+                    }
+                </td>
+                <td width="90" colspan="2" class="text-center">
+                    @if (Model.IsAdmin)
+                    {
+                        <span class="label label-success"><abbr title="К этому человеку можно обратиться по вопросам склада" class="initialism">Редактор</abbr></span>
+                    }
+                </td>
+                <td rowspan="2" width="150" class="text-center"></td>
+            </tr>
+            <tr height="40">
+                <td colspan="3" class="text-left">
+                    <span>&emsp;Должность: @Model.Post</span>
+                </td>
+                <td colspan="2" class="text-left">
+                    <span>Тел. @Model.Phone</span>
+                </td>
+            </tr>
+            <tr height="40">
+                <td colspan="5" class="text-left">
+                    @{
+                        if (log == 1)
+                        { <span>&ensp; Отображены предметы пользователя</span> }
+                        else
+                        { <span>&ensp; Отображены действия пользователя</span> }
+                    }
+                </td>
+                <td class="text-center">
+                    @if (log == 1)
+                    { <a href="@Url.Action("UserCard", "User", new { UserID = Model.ID_User, Log = 0 })">Список\Лог</a> }
+                    else
+                    { <a href="@Url.Action("UserCard", "User", new { UserID = Model.ID_User, Log = 1 })">Список\Лог</a> }
+                </td>
+            </tr>
+        </table>
+        @{
+            if (log == 1)
+            {
+                Html.RenderAction("UserEquipList", "Equip", new { UserID = Model.ID_User });
+            }
+            else
+            {
+                Html.RenderAction("UserLog", "Logs", new { UserID = Model.ID_User });
+            }
+        }
+    </div>
+</div>

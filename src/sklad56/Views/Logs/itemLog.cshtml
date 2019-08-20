@@ -1,0 +1,23 @@
+﻿@model IList<sklad56.Models.Action>
+
+<table class="table table-condensed">
+    <thread>
+        <tr>
+            <th>ФИО</th>
+            <th>Действие</th>
+            <th>Дата</th>
+            <th>Коментарий</th>
+        </tr>
+    </thread>
+    <tbody>
+        @foreach (var act in Model)
+        {
+            <tr>
+                <td width="160"><a href="@Url.Action("UserCard", "User", new { UserID = act.User.ID_User })">@act.User.Username</a> </td>
+                <td width="100">@act.Todo.ToEnumAct() </td>
+                <td width="170">@act.When.ToString()</td>
+                <td width="190">@act.Coment </td>
+            </tr>
+        }
+    </tbody>
+</table>

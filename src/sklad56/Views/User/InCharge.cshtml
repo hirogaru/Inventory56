@@ -1,0 +1,71 @@
+﻿@model List<sklad56.Models.UserInCharge>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                @if (User.IsInRole(sklad56.Globals.editGroup))
+                {
+                    <li><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                    <li>@Html.ActionLink("Операции", "Movements", "Home")</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("карточки", "UserList", "User")</li>
+            <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-9 content">
+        <h3>Список ответственных за ноутбуки</h3>
+
+        <table class="table table-condensed">
+            <thread>
+                <tr>
+                    <th class="text-center">номер комплекта</th>
+                    <th>ответственное лицо</th>
+                </tr>
+            </thread>
+            <tbody>
+                @foreach (var obj in Model)
+                {
+                    <tr>
+                        <td width="7%" class="text-center">
+                            @if (obj.itemID != null)
+                            {
+                                <a href="@Url.Action("EquipItem", "Equip", new { ItemID = obj.itemID })">@obj.item</a>
+                            }
+                            else
+                            {
+                                @obj.item
+                            }
+                        </td>
+                        <td width="30%">
+                            @if (obj.userID != null)
+                            {
+                                <a href="@Url.Action("UserCard", "User", new { UserID = obj.userID })">@obj.user</a>
+                            }
+                            else
+                            {
+                                @obj.user
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>

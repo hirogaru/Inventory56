@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body style="margin: 8px">
+    <div class="navbar navbar-default navbar-fixed-top">
+        <span class="navbar-text">СКЛАД 56</span>
+        <ul class="nav nav-pills pull-right">
+            @if (User.Identity.IsAuthenticated)
+            {
+            <li><span class="breadcrumb">Вход выполнен</span></li> }
+            else
+            {
+            <li><span class="breadcrumb">Не Авторизован</span></li> }
+            <li>&nbsp;&nbsp;&nbsp;</li>
+        </ul>
+
+    </div>
+
+    @RenderBody()
+
+    <div class="navbar-fixed-bottom alert-info">
+        @{ Html.RenderAction("Footer", "Account"); }
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

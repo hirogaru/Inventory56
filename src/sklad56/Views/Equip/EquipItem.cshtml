@@ -1,0 +1,123 @@
+﻿@model sklad56.Models.Item
+
+@{
+    ViewBag.Title = "EquipItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                @if (User.IsInRole(sklad56.Globals.editGroup))
+                {
+                    <li><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                    <li>@Html.ActionLink("Операции", "Movements", "Home")</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("карточки", "UserList", "User")</li>
+            <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-8 tab-content">
+        <h3>Карточка предмета</h3>
+        <table class="breadcrumb">
+            <tbody>
+                <tr>
+                    <td width="140" height="45" class="text-right">
+                        @Model.Itemname
+                    </td>
+
+                    <td width="180" height="45">
+                        &nbsp;
+                        @Model.Serial &nbsp;
+                        @if (User.IsInRole(sklad56.Globals.editGroup))
+                        {
+                        <span class="label label-danger">&nbsp;x&nbsp;</span>
+                        <span class="label label-info">...</span>
+                        }
+                    </td>
+                    <td width="160" height="45" class="text-center">
+                        @Model.Cast.ToEnumTyp()
+                    </td>
+                    <td width="160" height="45" class="text-center">
+                        @{
+                            if (Model.Broken == true)
+                            {
+                                <span class="label label-danger">Сломан</span>
+                            }
+                            else
+                            {
+                                <span class="label label-success">Рабочий</span>
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td width="160" height="45" class="text-center">
+                        <a href="@Url.Action("PackageList", "Package", new { PackID = Model.Belongs })">@Model.Package.Name</a>
+                    </td>
+                    <td width="160" height="45" class="text-center">
+                        @{
+                            if (Model.Username == null)
+                            {
+                                if (Model.Place.ToString() != "44444444-4444-4444-4444-444444444444")
+                                { 
+                                    <span>Доступен</span>
+                                    if (User.IsInRole(sklad56.Globals.editGroup))
+                                    { <span class="label label-success">&nbsp;+&nbsp;</span> }
+                                }
+                                else
+                                {
+                                    <span>Не доступен</span>
+                                }
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("UserCard", "User", new { UserID = Model.User.ID_User })">@Model.User.Username</a>
+                                if (User.IsInRole(sklad56.Globals.editGroup))
+                                { <span class="label label-warning">&nbsp;-&nbsp;</span> }
+                            }
+                        }
+                    </td>
+                    <td width="160" height="45" class="text-center">
+                        <a href="@Url.Action("PlaceList", "Package", new { PlaceID = Model.Place })">@Model.Place1.Name</a>
+                    </td>
+                    <td width="160" height="45" class="text-center">
+                        @{
+                            if (Model.Verifi == null)
+                            {
+
+                                if (User.IsInRole(sklad56.Globals.editGroup))
+                                { <a href="#">Поверки не требуется</a> }
+                                else
+                                { <span>Поверки не требуется</span> }
+                            }
+                            else
+                            {
+                                string date = Model.Verifi.ToString().TrimEnd('0', ':');
+                                if (User.IsInRole(sklad56.Globals.editGroup))
+                                {<a href="#">Поверка:<br> @date</a>}
+                                else
+                                {<span>Поверка:<br> @date</span> }
+                            }
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Лог предмета</h4>
+        @{
+            Html.RenderAction("itemLog", "Logs", new { ItemID = Model.ID_Item });
+        }
+    </div>
+</div>

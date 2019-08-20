@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Inventory56" Class="DataClassDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=SQLSERVER\TEST;Initial Catalog=Inventory56;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="Inventory56ConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Actions" Member="Actions">
+    <Type Name="Action">
+      <Column Name="ID_Act" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Whom" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="What" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="[When]" Member="When" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Todo" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Coment" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="User_Action" Member="User" ThisKey="Whom" OtherKey="ID_User" Type="User" IsForeignKey="true" />
+      <Association Name="User_Action1" Member="User1" ThisKey="AdminID" OtherKey="ID_User" Type="User" IsForeignKey="true" />
+      <Association Name="Item_Action" Member="Item" ThisKey="What" OtherKey="ID_Item" Type="Item" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="ID_User" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Post" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="User_Action" Member="Actions" ThisKey="ID_User" OtherKey="Whom" Type="Action" />
+      <Association Name="User_Action1" Member="Actions1" ThisKey="ID_User" OtherKey="AdminID" Type="Action" />
+      <Association Name="User_Item" Member="Items" ThisKey="ID_User" OtherKey="Username" Type="Item" />
+      <Association Name="User_LogoPass" Member="LogoPasses" ThisKey="ID_User" OtherKey="UserID" Type="LogoPass" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DelData" Member="DelDatas">
+    <Type Name="DelData">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DeletedData" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InCharge" Member="InCharges">
+    <Type Name="InCharge">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Number" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Items" Member="Items">
+    <Type Name="Item">
+      <Column Name="ID_Item" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Itemname" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Serial" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Belongs" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Place" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="Broken" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Verifi" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Cast" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="Item_Action" Member="Actions" ThisKey="ID_Item" OtherKey="What" Type="Action" />
+      <Association Name="User_Item" Member="User" ThisKey="Username" OtherKey="ID_User" Type="User" IsForeignKey="true" />
+      <Association Name="Package_Item" Member="Package" ThisKey="Belongs" OtherKey="ID_Pack" Type="Package" IsForeignKey="true" />
+      <Association Name="Place_Item" Member="Place1" ThisKey="Place" OtherKey="ID_Place" Type="Place" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LogoPass" Member="LogoPasses">
+    <Type Name="LogoPass">
+      <Column Name="ID_Login" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Login" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="User_LogoPass" Member="User" ThisKey="UserID" OtherKey="ID_User" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Packages" Member="Packages">
+    <Type Name="Package">
+      <Column Name="ID_Pack" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Coment" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Package_Item" Member="Items" ThisKey="ID_Pack" OtherKey="Belongs" Type="Item" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Places" Member="Places">
+    <Type Name="Place">
+      <Column Name="ID_Place" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="City" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Lati" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Long" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Picture" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="Place_Item" Member="Items" ThisKey="ID_Place" OtherKey="Place" Type="Item" />
+    </Type>
+  </Table>
+</Database>

@@ -1,0 +1,26 @@
+﻿@model IList<sklad56.Models.EquipListViewModel>
+
+<table class="table table-condensed">
+    <thread>
+        <tr>
+            <th width="120">Предмет</th>
+            <th width="120">Серийный номер</th>
+            <th width="160">Дата</th>
+            <th width="40"></th>
+        </tr>
+    </thread>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td><a href="@Url.Action("EquipItem", "Equip", new { ItemID = x.item.ID_Item })">@x.item.Itemname</a></td>
+                <td>@x.item.Serial </td>
+                <td>@x.date.ToString()</td>
+                <td>
+                    @if (User.IsInRole(sklad56.Globals.editGroup))
+                    { <span class="label label-warning">списать</span> }
+                </td>
+        </tr>
+        }
+    </tbody>
+</table>

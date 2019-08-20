@@ -1,0 +1,70 @@
+﻿@model sklad56.Models.PageableData<sklad56.Models.Action>
+
+@{
+    ViewBag.Title = "LogsIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var sortVar = (int)ViewBag.sort;
+}
+
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                @if (User.IsInRole(sklad56.Globals.editGroup))
+                {
+                    <li><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                    <li>@Html.ActionLink("Операции", "Movements", "Home")</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("карточки", "UserList", "User")</li>
+            <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li class="active"><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-9 tab-content">
+        <h3>Записи действий на складе</h3>
+
+        <table class="table table-condensed">
+            <thread>
+                <tr class="info">
+                    <th width="130"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 1 })">Пользователь</a></th>
+                    <th width="120"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 2 })">Предмет</a></th>
+                    <th width="80"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 3 })">Действие</a></th>
+                    <th width="80"><a href="@Url.Action("LogList", "Logs", new { page = Model.PageNo, sort = 4 })">Дата</a></th>
+                    <th width="160">Комментарий</th>
+                    <th width="130">Регистратор</th>
+                </tr>
+            </thread>
+            <tbody>
+                @foreach (var act in Model.List)
+                {
+                    <tr>
+                        <td><a href="@Url.Action("UserCard", "User", new { UserID = act.User.ID_User })">@act.User.Username</a></td>
+                        <td><a href="@Url.Action("EquipItem", "Equip", new { ItemID = act.Item.ID_Item })">@act.Item.Itemname</a></td>
+                        <td>@act.Todo.ToEnumAct() </td>
+                        <td>@act.When.ToString("d")</td>
+                        <td>@act.Coment</td>
+                        <td>
+                        @act.User1.Username
+                        @if (User.IsInRole(sklad56.Globals.editGroup))
+                        {
+                            <span class="label label-warning">&nbsp;-&nbsp;</span>
+                        }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="pagination">
+            @Html.PageLinks(Model.PageNo, Model.CountPage, x => Url.Action("LogList", new { page = x, sort = sortVar }))
+        </div>
+    </div>
+</div>

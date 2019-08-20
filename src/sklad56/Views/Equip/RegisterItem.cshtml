@@ -1,0 +1,99 @@
+﻿@model sklad56.Models.Item
+
+@{
+    ViewBag.Title = "RegisterItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                <li class="active"><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                <li><a href="@Url.Action("Movements", "Home")">Операции</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("пользователи", "UserEditList", "User")</li>
+            <li>@Html.ActionLink("предметы", "EquipEditList", "Equip")</li>
+            <li>@Html.ActionLink("комплекты", "EditList", "Package")</li>
+        </ul>
+    </div>
+    <div class="col-sm-8 content">
+        <h3>Создание/редактирование предмета</h3>
+
+        @using (Html.BeginForm("RegisterItem", "Equip", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="Itemname">
+                        <abbr title="Чаще всего это то имя, которое указано в паспорте" class="initialism">Название предмета</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.TextBox("Itemname", Model.Itemname)
+                        @Html.ValidationMessage("Itemname")
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="Serial">
+                        <abbr title="Берётся из паспорта или отпечатан на самом предмете" class="initialism">Серийный номер</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.TextBox("Serial", Model.Serial)
+                        @Html.ValidationMessage("Serial")
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="Cast">
+                        <abbr title="К какому типу оборудования можно отнести предмет? Необходимо для сортировки предметов" class="initialism">Тип</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.DropDownListFor(x => x.Cast, (List<SelectListItem>)ViewData["CastList"])
+                        @Html.ValidationMessage("Cast")
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="Package">
+                        <abbr title="К какому комплекту относится данное оборудование? Необходимо для отчётности" class="initialism">Комплект</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.DropDownListFor(x => x.Belongs, (List<SelectListItem>)ViewData["PackageList"])
+                        @Html.ValidationMessage("Package")
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="Place">
+                        <abbr title="Укажите, к какому постоянному месту приписано оборудование. Где оно &ldquo;живёт&ldquo; ?" class="initialism">Место</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.DropDownListFor(x => x.Place, (List<SelectListItem>)ViewData["PlaceList"])
+                        @Html.ValidationMessage("Place")
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="Broken">
+                        <abbr title="Данный пункт нужен для отбраковки нерабочих предметов" class="initialism">Состояние</abbr>
+                    </label>
+                    <div class="controls">
+                        @Html.CheckBox("Broken", false) Не работает
+                        @Html.ValidationMessage("Broken")
+                    </div>
+                </div>
+                <br />
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        применить
+                    </button>
+                    @Html.ActionLink("Cancel", "EquipEditList", "Equip", null, new { @class = "btn" })
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>
+

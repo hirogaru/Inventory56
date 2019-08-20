@@ -1,0 +1,57 @@
+﻿@model sklad56.Models.PlaceViewModel
+
+@{
+    ViewBag.Title = "PlaceList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10 top-menu">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                @if (User.IsInRole(sklad56.Globals.editGroup))
+                {
+                    <li><a href="@Url.Action("Editor", "Home")">Редактирование</a></li>
+                    <li>@Html.ActionLink("Операции", "Movements", "Home")</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-2 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+            <li>@Html.ActionLink("карточки", "UserList", "User")</li>
+            <li>@Html.ActionLink("предметы", "EquipList", "Equip")</li>
+            <li><a href="@Url.Action("LogList", "Logs")">журнал</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-8 content">
+        <br>
+        <table class="well">
+            <tr>
+                <td width="300" class="text-right"><h3>@Model.place.Name</h3>@Model.place.City</td>
+                <td width="20"></td>
+                <td width="280" valign="bottom" align="center"><img src="~/Content/img/@Model.place.Picture" width="250" height="100" class=" img-polaroid"></td>
+            </tr>
+        </table>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-condensed">
+                <tbody>
+                    @foreach (var item in Model.items.List)
+                    {
+                        <tr>
+                            <td><a href="@Url.Action("EquipItem", "Equip", new { ItemID = item.ID_Item })">@item.Itemname @item.Serial</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            @Html.PageLinks(Model.items.PageNo, Model.items.CountPage, x => Url.Action("PlaceList", new { PlaceID = Model.place.ID_Place, page = x }))
+        </div>
+
+    </div>
+</div>

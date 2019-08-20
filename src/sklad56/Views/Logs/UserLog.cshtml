@@ -1,0 +1,23 @@
+﻿@model IList<sklad56.Models.Action>
+
+<table class="table table-condensed" width=" 410">
+    <thread>
+        <tr>
+            <th width="150">Предмет</th>
+            <th width="100">Действие</th>
+            <th width="160">Дата</th>
+            <th width="180">Коментарий</th>
+        </tr>
+    </thread>
+    <tbody>
+        @foreach (var act in Model)
+        {
+            <tr>
+                <td><a href="@Url.Action("EquipItem", "Equip", new { ItemID = act.Item.ID_Item })">@act.Item.Itemname</a></td>
+                <td>@act.Todo.ToEnumAct() </td>
+                <td>@act.When.ToString()</td>
+                <td>@act.Coment</td>
+            </tr>
+        }
+    </tbody>
+</table>
