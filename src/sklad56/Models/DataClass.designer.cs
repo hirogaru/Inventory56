@@ -357,7 +357,7 @@ namespace sklad56.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Action", Storage="_User", ThisKey="Whom", OtherKey="ID_User", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Action", Storage="_User", ThisKey="Whom", OtherKey="ID_User", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public User User
 		{
 			get
@@ -425,7 +425,7 @@ namespace sklad56.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Item_Action", Storage="_Item", ThisKey="What", OtherKey="ID_Item", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Item_Action", Storage="_Item", ThisKey="What", OtherKey="ID_Item", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public Item Item
 		{
 			get
@@ -1216,7 +1216,7 @@ namespace sklad56.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Item", Storage="_User", ThisKey="Username", OtherKey="ID_User", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Item", Storage="_User", ThisKey="Username", OtherKey="ID_User", IsForeignKey=true, DeleteRule="SET NULL")]
 		public User User
 		{
 			get

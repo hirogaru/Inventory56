@@ -23,7 +23,7 @@ namespace sklad56.Models
         Guid getAdminID(string login);
 
         #endregion 
-
+        
         #region User
 
         IQueryable<User> Users { get; }
@@ -63,7 +63,7 @@ namespace sklad56.Models
         bool RemoveAct(System.Guid idAct);
 
         #endregion 
-
+        
         #region Package
 
         IQueryable<Package> Packages { get; }
@@ -75,7 +75,6 @@ namespace sklad56.Models
         bool RemovePack(System.Guid idPack);
 
         #endregion 
-
     }
 
     public class SqlRepository : IRepository
@@ -180,6 +179,17 @@ namespace sklad56.Models
             User instance = Db.Users.Where(p => p.ID_User == idUser).FirstOrDefault();
             if (instance != null)
             {
+                DelData backup = new DelData() 
+                { 
+                    DeletedData = "User" +
+                    "|" + instance.ID_User.ToString() +
+                    "|" + instance.Username +
+                    "|" + instance.Post +
+                    "|" + instance.Phone + 
+                    "|" + instance.IsAdmin.ToString() 
+                };
+                Db.DelDatas.InsertOnSubmit(backup); //бэкапим данные
+
                 Db.Users.DeleteOnSubmit(instance);
                 Db.Users.Context.SubmitChanges();
                 return true;
@@ -234,6 +244,21 @@ namespace sklad56.Models
             Item instance = Db.Items.Where(p => p.ID_Item == idItem).FirstOrDefault();
             if (instance != null)
             {
+                DelData backup = new DelData()
+                {
+                    DeletedData = "Item" +
+                    "|" + instance.ID_Item.ToString() +
+                    "|" + instance.Itemname +
+                    "|" + instance.Serial +
+                    "|" + instance.Belongs.ToString() +
+                    "|" + instance.Place.ToString() +
+                    "|" + instance.Cast.ToString() +
+                    "|" + (instance.Username == null ? "null" : instance.Username.ToString()) +
+                    "|" + (instance.Broken == null ? "null" : instance.Broken.ToString()) +
+                    "|" + (instance.Verifi == null ? "null" : instance.Verifi.ToString())
+                };
+                Db.DelDatas.InsertOnSubmit(backup); //бэкапим данные
+
                 Db.Items.DeleteOnSubmit(instance);
                 Db.Items.Context.SubmitChanges();
                 return true;
@@ -275,6 +300,19 @@ namespace sklad56.Models
             Action instance = Db.Actions.Where(p => p.ID_Act == idAct).FirstOrDefault();
             if (instance != null)
             {
+                DelData backup = new DelData()
+                {
+                    DeletedData = "Action" +
+                    "|" + instance.ID_Act.ToString() +
+                    "|" + instance.Whom.ToString() +
+                    "|" + instance.What.ToString() +
+                    "|" + instance.When.ToString() +
+                    "|" + instance.Todo.ToString() +
+                    "|" + instance.Coment +
+                    "|" + instance.AdminID.ToString()
+                };
+                Db.DelDatas.InsertOnSubmit(backup); //бэкапим данные
+                
                 Db.Actions.DeleteOnSubmit(instance);
                 Db.Actions.Context.SubmitChanges();
                 return true;
@@ -323,6 +361,15 @@ namespace sklad56.Models
             Package instance = Db.Packages.Where(p => p.ID_Pack == idPack).FirstOrDefault();
             if (instance != null)
             {
+                DelData backup = new DelData()
+                {
+                    DeletedData = "Package" +
+                    "|" + instance.ID_Pack.ToString() +
+                    "|" + instance.Name +
+                    "|" + instance.Coment
+                };
+                Db.DelDatas.InsertOnSubmit(backup); //бэкапим данные
+
                 Db.Packages.DeleteOnSubmit(instance);
                 Db.Packages.Context.SubmitChanges();
                 return true;
@@ -351,10 +398,10 @@ namespace sklad56.Models
             return "Admin";
         }
 
-        public IQueryable<User> Users
-        {
-            get { return (new List<User> { new User { Username = "User1" } }).AsQueryable(); }
-        }
+        public IQueryable<User> Users { get { return (new List<User> { new User { 
+            Username = "TestUser", 
+            ID_User = Guid.Parse("14444444-4444-4444-4444-444444444444"), 
+            Post ="TestPost" } }).AsQueryable(); } }
 
         public bool CreateUser(User instance)
         {
@@ -371,8 +418,20 @@ namespace sklad56.Models
             throw new System.NotImplementedException();
         }
 
-        public IQueryable<Place> Places { get { return (new List<Place> { new Place { Name = "zone 51" } }).AsQueryable(); } }
-        public IQueryable<Item> Items { get { return (new List<Item> { new Item { Itemname = "Item 111" } }).AsQueryable(); } }
+        public IQueryable<Place> Places { get { return (new List<Place> { new Place { 
+            Name = "TestZone", 
+            ID_Place = Guid.Parse("14444444-4444-4444-4444-444444444444"),
+            Picture = "oblivion.png",
+            City = "TestTown" } }).AsQueryable(); } }
+
+        public IQueryable<Item> Items { get { return (new List<Item> { new Item { 
+            Itemname = "TestItem", 
+            ID_Item = Guid.Parse("14444444-4444-4444-4444-444444444444"), 
+            Place1 = new Place { Name = "TestZone", ID_Place = Guid.Parse("14444444-4444-4444-4444-444444444444")},
+            Package = new Package { Name = "TestPack", ID_Pack = Guid.Parse("14444444-4444-4444-4444-444444444444")},
+            Serial = "TestSerial", 
+            Cast = 1 } }).AsQueryable(); } }
+
         public bool CreateItem(Item instance)
         {
             throw new System.NotImplementedException();
@@ -388,7 +447,15 @@ namespace sklad56.Models
             throw new System.NotImplementedException();
         }
 
-        public IQueryable<sklad56.Models.Action> Actions { get { return (new List<sklad56.Models.Action> { new sklad56.Models.Action() }).AsQueryable(); } }
+        public IQueryable<sklad56.Models.Action> Actions { get { return (new List<sklad56.Models.Action> { new sklad56.Models.Action{
+            ID_Act = Guid.Parse("14444444-4444-4444-4444-444444444444"),
+            Item = new Item { Itemname = "TestItem", ID_Item = Guid.Parse("14444444-4444-4444-4444-444444444444") },
+            When = DateTime.Now,
+            User = new User { Username = "TestUser", ID_User = Guid.Parse("14444444-4444-4444-4444-444444444444") },
+            User1 = new User { Username = "TestAdmin" }, 
+            Todo = 2,
+            Coment = "Test" } }).AsQueryable(); } }
+
         public bool CreateAct(sklad56.Models.Action instance)
         {
             throw new System.NotImplementedException();
@@ -399,7 +466,11 @@ namespace sklad56.Models
             throw new System.NotImplementedException();
         }
 
-        public IQueryable<Package> Packages { get { return (new List<Package> { new Package { Name = "some pack" } }).AsQueryable(); } }
+        public IQueryable<Package> Packages { get { return (new List<Package> { new Package { 
+            Name = "TestPack", 
+            ID_Pack = Guid.Parse("14444444-4444-4444-4444-444444444444"),
+            Coment = "TestComment" } }).AsQueryable(); } }
+
         public bool CreatePack(Package instance)
         {
             throw new System.NotImplementedException();

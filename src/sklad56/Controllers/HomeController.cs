@@ -9,8 +9,8 @@ namespace sklad56.Controllers
     {
         public IRepository Repository
         {
-            //get { return new TestRepository(); }
-            get { return Service<IRepository>.GetInstance(); }
+            get { return new TestRepository(); }
+            //get { return Service<IRepository>.GetInstance(); }
         }
     }
 

@@ -39,7 +39,7 @@ namespace sklad56.UnitTest
         public void EquipItemViewTest()
         {
             EquipController controller = new EquipController();
-            Guid ItemID = default(Guid);
+            Guid ItemID = Guid.Parse("14444444-4444-4444-4444-444444444444");
             ActionResult result = controller.EquipItem(ItemID);
             Assert.IsInstanceOfType(result, typeof(ViewResult)); //проверяем, результ это вью?
             
@@ -98,7 +98,7 @@ namespace sklad56.UnitTest
         public void UserCardViewTest()
         {
             UserController controller = new UserController();
-            Guid UserID = default(Guid);
+            Guid UserID = Guid.Parse("14444444-4444-4444-4444-444444444444");
             ActionResult result = controller.UserCard(UserID,Log: 1);
             Assert.IsInstanceOfType(result, typeof(ViewResult)); //проверяем, результ это вью?
             
@@ -177,7 +177,7 @@ namespace sklad56.UnitTest
         public void PackageListsViewTest()
         {
             var controller = new PackageController();
-            var ID = default(Guid);
+            var ID = Guid.Parse("14444444-4444-4444-4444-444444444444"); 
             ActionResult result1 = controller.PackageList(ID, page: 1);
             Assert.IsInstanceOfType(result1, typeof(ViewResult));
             ViewResult view1 = result1 as ViewResult;

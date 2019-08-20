@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Inventory56" Class="DataClassDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=SQLSERVER\TEST;Initial Catalog=Inventory56;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="Inventory56ConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=SQLServer;Initial Catalog=Inventory56;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="Inventory56ConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Actions" Member="Actions">
     <Type Name="Action">
       <Column Name="ID_Act" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -9,9 +9,9 @@
       <Column Name="Todo" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Column Name="AdminID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="Coment" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Association Name="User_Action" Member="User" ThisKey="Whom" OtherKey="ID_User" Type="User" IsForeignKey="true" />
+      <Association Name="User_Action" Member="User" ThisKey="Whom" OtherKey="ID_User" Type="User" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="User_Action1" Member="User1" ThisKey="AdminID" OtherKey="ID_User" Type="User" IsForeignKey="true" />
-      <Association Name="Item_Action" Member="Item" ThisKey="What" OtherKey="ID_Item" Type="Item" IsForeignKey="true" />
+      <Association Name="Item_Action" Member="Item" ThisKey="What" OtherKey="ID_Item" Type="Item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Users" Member="Users">
@@ -52,7 +52,7 @@
       <Column Name="Verifi" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="Cast" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Association Name="Item_Action" Member="Actions" ThisKey="ID_Item" OtherKey="What" Type="Action" />
-      <Association Name="User_Item" Member="User" ThisKey="Username" OtherKey="ID_User" Type="User" IsForeignKey="true" />
+      <Association Name="User_Item" Member="User" ThisKey="Username" OtherKey="ID_User" Type="User" IsForeignKey="true" DeleteRule="SET NULL" />
       <Association Name="Package_Item" Member="Package" ThisKey="Belongs" OtherKey="ID_Pack" Type="Package" IsForeignKey="true" />
       <Association Name="Place_Item" Member="Place1" ThisKey="Place" OtherKey="ID_Place" Type="Place" IsForeignKey="true" />
     </Type>

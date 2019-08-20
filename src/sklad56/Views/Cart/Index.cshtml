@@ -65,14 +65,20 @@
         </table>
         @using (Html.BeginForm("Finish", "Cart", FormMethod.Post, new { @class = "form-horizontal" }))
         {
-            <table align="right">
+            <table align="center">
                 <tr>
-                    <td>
-                        <p align=right><b>На кого: &nbsp;</b></p>
-                    </td>
-                    <td>
-                        <p>@Html.DropDownListFor(md => md.User, Model.Users)</p>
-                    </td>
+                <td rowspan="2" valign="top">
+                    <label class="checkbox">
+                        <input type="checkbox" value="" class="disabled">
+                        При оформлении действия распечатать накладную &nbsp; &nbsp;
+                    </label>
+                </td>
+                <td>
+                    <p align=right><b>На кого: &nbsp;</b></p>
+                </td>
+                <td>
+                    <p>@Html.DropDownListFor(md => md.User, Model.Users)</p>
+                </td>
                 </tr>
                 <tr>
                     <td>
@@ -83,10 +89,7 @@
                     </td>
                 </tr>
             </table>
-            <label class="checkbox">
-                <input type="checkbox" value="" class="disabled">
-                При оформлении действия распечатать накладную
-            </label>
+
             @Html.Hidden("ReturnUrl", Model.ReturnUrl)
             <div class="text-center">
                 <br /><br />

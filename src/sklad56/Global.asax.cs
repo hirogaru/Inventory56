@@ -28,7 +28,7 @@ namespace sklad56
         public const string editGroup = DomainName + "\\appGroup_Inventory56_Редактирующие";
         
         //Числовые значения
-        public const int itemsPerPage = 20;  //Кол-во записей на странице
+        public const int itemsPerPage = 5;  //Кол-во записей на странице
 
         public const int TeaserChars = 120;  //кол-во знаков до тизера
 
